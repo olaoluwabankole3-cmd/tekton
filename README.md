@@ -21,4 +21,6 @@ TEKTON remains a provisional working name pending trademark clearance.
 
 ## Brand identity
 
-The approved charcoal/ash TEKTON identity is archived in [`brand/`](brand/README.md), including vector marks, exact palette codes, design tokens and usage guidelines. The website and demo have not yet been visually migrated to the new kit.
+The current approved TEKTON brand artwork is **v3.0**: exact visible proportions reconstructed from the supplied page-2 logo reference, with the shorter detached pillar and the original icon-to-wordmark balance. The master vector source and printable guidelines are in [brand/](brand/README.md). Older v1/v2 marks are superseded.
+
+The existing static landing page and demo have **not** been visually rebranded in this asset-only update.

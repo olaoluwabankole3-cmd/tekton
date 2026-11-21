@@ -1,62 +1,82 @@
 {
-  "version": "2.0.0",
-  "units": "96-unit SVG viewBox",
+  "version": "3.0.0",
+  "source": "User approved TEKTON brand-guidelines page-2 primary logo screenshot",
+  "reference_image_dimensions": [
+    1672,
+    941
+  ],
+  "master_viewBox": [
+    0,
+    0,
+    440,
+    145
+  ],
   "roof_left": [
     [
-      10,
-      41.94
+      2,
+      43
     ],
     [
-      48,
-      20
+      75,
+      4
     ],
     [
-      48,
-      37
+      75,
+      35
     ],
     [
-      10,
-      58.94
+      2,
+      75
     ]
   ],
   "roof_right": [
     [
-      48,
-      20
+      75,
+      4
     ],
     [
-      86,
-      41.94
+      126,
+      34
     ],
     [
-      86,
-      58.94
+      125,
+      63
     ],
     [
-      48,
-      37
+      75,
+      35
     ]
   ],
-  "detached_stem": [
+  "pillar": [
     [
-      35,
-      67
+      45,
+      70
     ],
     [
-      56,
-      54
+      80,
+      50
     ],
     [
-      56,
-      80
+      80,
+      118
     ],
     [
-      35,
-      93
+      45,
+      140
     ]
   ],
-  "minimum_roof_to_stem_distance_units": 10.722,
+  "symbol_ink_px": [
+    124,
+    136
+  ],
+  "wordmark_ink_px": [
+    285,
+    52
+  ],
+  "gap_px": 23,
+  "symbol_wordmark_ink_height_ratio": 2.6153846153846154,
+  "roof_stem_clearance_px": 10.645,
   "overlap_area": 0,
-  "method": "Roof beam halves meet at a center seam; stem remains detached by negative space.",
-  "supersedes": "v1 overlapping variant"
+  "measurement_quality": "Faithful visible-pixel reconstruction (about +/-1 pixel). Original native design file unavailable.",
+  "do_not": "Do not extend pillar, independently enlarge icon or reposition wordmark."
 }

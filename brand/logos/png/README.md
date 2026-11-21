@@ -1,3 +1,3 @@
-# TEKTON raster logo exports
+# TEKTON logo exports / v3.0
 
-The high-resolution PNG logo lockups are provided in the corrected v2 ZIP package. To reproduce them from the **corrected** vector masters stored in this repository, run `python -m pip install -r brand/scripts/requirements.txt && python brand/scripts/export_assets.py` from the repository root. Do not reuse v1 output. SVG masters are the source of truth.
+Full-size 2000 px transparent lockup PNGs are provided in the downloadable v3 brand kit. Re-export from the official SVG masters under `../svg/`; never redraw text using a substitute font or lengthen the dark pillar.
