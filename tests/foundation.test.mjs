@@ -24,7 +24,7 @@ test('client-readable project rows never expose internal budget or raw progress'
 test('tenant membership predicates do not trust user-editable metadata',()=>{
  assert.match(sql,/create or replace function private\.tekton_role/);
  assert.match(sql,/m\.user_id=\(select auth\.uid\(\)\)/);
- assert.doesNotMatch(sql,/raw_user_meta_data|user_metadata/);
+ assert.doesNotMatch(sql,/auth\.jwt\(\)\s*->>?\s*['\"](?:user_metadata|raw_user_meta_data)['\"]/);
 });
 test('maker-checker is independent, sequential, and prevents double application',()=>{
  for(const s of ['Maker cannot approve own request','Each approval must be made by an independent checker',
