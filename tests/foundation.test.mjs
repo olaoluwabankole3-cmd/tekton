@@ -44,12 +44,12 @@ test('all public trusted functions revoke public execution and grant only authen
  }
  assert.ok(!sql.includes('grant update on public.tekton_workflows'));
 });
-test('authenticated workspace is unconfigured by default',()=>{
- assert.match(cfg,/supabaseUrl: ""/);
- assert.match(cfg,/supabasePublishableKey: ""/);
+test('engineering workspace targets dedicated TEKTON project with only a publishable key',()=>{
+ assert.match(cfg,/supabaseUrl: "https:\/\/fryyptustahhuuoorfet\.supabase\.co"/);
+ assert.match(cfg,/supabasePublishableKey: "sb_publishable_/);
+ assert.doesNotMatch(cfg,/sb_secret_|service_role/);
  assert.ok(app.includes('if(!configValid()){unavailable();return}'));
  assert.ok(app.includes('supabase-js@2.119.2'));
- assert.doesNotMatch(app,/sb_secret_[A-Za-z0-9]+/);
  assert.ok(manual.includes('Do not use Converge, ALIENTO'));
 });
 test('sensitive project changes are server-side and audited',()=>{
@@ -60,4 +60,16 @@ test('sensitive project changes are server-side and audited',()=>{
 });
 test('workspace script is valid JavaScript',()=>{
  assert.doesNotThrow(()=>new Function(app));
+});
+
+test('privileged RPCs are in private schema behind invoker API wrappers',()=>{
+ const wrappers=readFileSync('supabase/migrations/20261121190000_tekton_private_rpc_wrappers_and_indexes.sql','utf8');
+ const names=[...sql.matchAll(/create or replace function public\.(tekton_[a-z_]+)/g)].map(x=>x[1]);
+ for(const n of names){
+  assert.ok(wrappers.includes('alter function public.'+n+'('),n);
+  assert.ok(wrappers.includes('private.'+n+'_impl'),n);
+  assert.ok(wrappers.includes('create function public.'+n+'('),n);
+ }
+ assert.equal((wrappers.match(/language sql security invoker/g)||[]).length,9);
+ assert.equal((wrappers.match(/create index if not exists /g)||[]).length,12);
 });

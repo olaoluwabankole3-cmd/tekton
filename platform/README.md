@@ -2,15 +2,15 @@
 
 **NOT the public demo.** The existing landing page, /demo/, and /pilot/ continue to work unchanged.
 
-This is a separate authenticated application using a dedicated Supabase project. It will remain disabled until its own database has been provisioned, migrated, verified, and configured. The page refuses to create a client without a public Supabase URL and publishable key.
+This is a separate authenticated application using the dedicated **TEKTON** Supabase project in ApexSync's organization. The project and its initial migrations have been created, including a follow-up hardening migration that moves privileged code into a private schema. The public URL and publishable key are configured on this development branch. This is not yet a released production service: multi-account authorization testing and a protected staging deployment are still required.
 
 ## Setup checklist
 
-1. Create a dedicated Supabase project for TEKTON. **Do not use Converge, ALIENTO, or any other project's database.**
-2. Review and apply `../supabase/migrations/20261121000000_tekton_tenant_foundation.sql` to the dedicated project only.
+1. ✅ Dedicated TEKTON Supabase project created: `fryyptustahhuuoorfet` in ApexSync's organization. **Do not use Converge, ALIENTO, or any other project's database.**
+2. ✅ The foundation and `20261121190000_tekton_private_rpc_wrappers_and_indexes.sql` migrations have been applied to TEKTON only.
 3. Run the Supabase security and performance advisors; fix findings. Run the authorization test plan in `../supabase/tests/README.md`.
 4. Enable verified email + password auth; configure allowed redirect URLs for the dedicated staging origin `/platform/`, verify SMTP and rate limits. Review signup abuse controls.
-5. Replace the blank public values in `config.js` with the new project's **public URL** and **publishable key**. These are client-side values. **Never add service_role or secret keys to this code.**
+5. ✅ `config.js` now includes the dedicated TEKTON **public URL** and **publishable key**. These are browser-visible values; **never add service_role or secret keys**.
 6. Deploy a separate protected staging hostname first. Do not merge or expose live tenants before authorization tests.
 7. Create a test confirmed user, sign in, create a workspace, add projects, link real auth users by their UUID using the restricted RPC, and test each approval role.
 8. Confirm private storage uploads, client-visible published files, no cross-tenant access, and audit event integrity.
