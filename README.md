@@ -32,3 +32,7 @@ The public landing page and browser-local interactive demo share the approved [`
 ## Sprint 1 — Guided demonstration and client-view isolation
 
 The demonstration now includes a first-visit onboarding guide, direct guided procurement handoffs, and a simulated client view restricted to one fictional assigned project. Site reports must be explicitly published by a simulated Project Manager or Executive Director to appear in the client portal. Role switching is NOT secure authentication; it is a preview of planned access policies. Never use real customer data in this browser-only demo.
+
+## Sprint 2 — Construction operations depth
+
+Sample project workspaces now include BOQ/cost-code packages, delivery milestones and variation status. Variations progress through Project Management, Quantity Surveying, Executive authorization, client consent and final application. Only applied changes affect approved budgets. Procurement now demonstrates fictional quotation comparisons, partial goods receipt with delivery-note references and simulated invoice matching, without actual payment or supplier systems. All data remains browser-local.
