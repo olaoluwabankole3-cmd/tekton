@@ -1,0 +1,97 @@
+function s3DefaultSetup(){
+ return {step:0,name:"Northstar Construction Group",type:"General contractor",region:"Nigeria",size:"25–100 employees",
+ modules:["projects","procurement","finance","site","documents","variations"],
+ approvalLimit:50000,previewSaved:false};
+}
+
+function s3Modules(){
+ return [{id:"projects",name:"Projects & schedules",desc:"Central project delivery workspace"},
+ {id:"procurement",name:"Procurement",desc:"Material request through invoice matching"},
+ {id:"finance",name:"Cost & finance",desc:"Commitments and budget oversight"},
+ {id:"site",name:"Site operations",desc:"Daily reporting and inspection context"},
+ {id:"documents",name:"Document controls",desc:"Sample drawings and evidence history"},
+ {id:"variations",name:"Change management",desc:"Scope, cost and schedule variations"}];
+}
+
+function s3SetupPage(){
+ const s=data.s3Setup,step=s.step,labels=["Company profile","Modules","Approval routing","Preview"];
+ const navbar=`<div class="s3-stepper" aria-label="Company setup steps">${labels.map((n,i)=>`<button data-s3-step="${i}" class="${step===i?'active':''}" ${i>step&&!s.previewSaved?'disabled':''} aria-current="${step===i?'step':'false'}"><span>${i+1}</span>${esc(n)}</button>`).join('')}</div>`;
+ let body='';
+ if(step===0)body=`<form class="s3-form" id="s3-profile-form"><div class="s3-form-grid"><label class="field full">Fictional company name<input name="name" maxlength="90" minlength="3" value="${esc(s.name)}" required></label><label class="field">Construction business type<select name="type">${["General contractor","Developer","Engineering consultant","Infrastructure contractor","Specialist subcontractor"].map(x=>`<option ${x===s.type?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label class="field">Operating region<select name="region">${["Nigeria","East Africa","West Africa","Europe","North America","Other"].map(x=>`<option ${x===s.region?'selected':''}>${esc(x)}</option>`).join('')}</select></label><label class="field full">Company size<select name="size">${["1–24 employees","25–100 employees","101–500 employees","500+ employees"].map(x=>`<option ${x===s.size?'selected':''}>${esc(x)}</option>`).join('')}</select></label></div><button type="submit" class="button">Continue to modules ${icon('arrow',14)}</button></form>`;
+ else if(step===1)body=`<h2>Choose your operating modules</h2><p class="muted">Project delivery is the core workspace. Toggle other fictional modules for this setup preview.</p><div class="s3-module-grid">${s3Modules().map(m=>`<button data-s3-toggle="${m.id}" class="s3-module ${s.modules.includes(m.id)?'selected':''}" aria-pressed="${s.modules.includes(m.id)}" ${m.id==='projects'?'disabled title="Core project workspace"':''}><span class="s3-check">${s.modules.includes(m.id)?icon('check',15):icon('plus',15)}</span><strong>${esc(m.name)}</strong><small>${esc(m.desc)}</small></button>`).join('')}</div><div class="s3-actions"><button class="button secondary" data-s3-step="0">Previous</button><button class="button" data-s3-next="2">Configure approvals ${icon('arrow',14)}</button></div>`;
+ else if(step===2)body=`<h2>Map departmental responsibility</h2><p class="muted">An example routing policy for material purchases—not a live authorization engine.</p><div class="s3-route">${[['01','Site Engineer','Raises requirements and site evidence'],['02','Project Manager','Reviews project need and scope'],['03','Quantity Surveyor','Verifies budget and quantities'],['04','Procurement Officer','Compares suppliers and issues purchase orders'],['05','Finance Officer','Authorizes expenditure and matches invoices']].map(([n,title,desc])=>`<div class="s3-route-row"><span>${n}</span><div><strong>${title}</strong><small>${desc}</small></div></div>`).join('')}</div><h3>Example management approval threshold</h3><p class="muted">Purchases over this illustrative amount would require senior sign-off in a future configured system.</p><div class="s3-approval">${[10000,50000,100000].map(n=>`<button data-s3-limit="${n}" class="${s.approvalLimit===n?'active':''}" aria-pressed="${s.approvalLimit===n}">${money(n)}</button>`).join('')}</div><div class="s3-actions"><button class="button secondary" data-s3-step="1">Previous</button><button class="button" data-s3-next="3">Review configuration ${icon('arrow',14)}</button></div>`;
+ else body=`<h2>Your fictional workspace configuration</h2><div class="s3-summary-grid">${[['Company',s.name],['Business type',s.type],['Region',s.region],['Company size',s.size],['Modules enabled',s.modules.length+' of '+s3Modules().length],['Senior approval threshold',money(s.approvalLimit)]].map(([a,b])=>`<div class="s3-summary"><small>${esc(a)}</small><strong>${esc(b)}</strong></div>`).join('')}</div><h3>Modules in this preview</h3><div class="s3-tags">${s3Modules().filter(m=>s.modules.includes(m.id)).map(m=>`<span>${esc(m.name)}</span>`).join('')}</div><div class="callout mt-2">This is a configuration plan saved to this browser only. It does not create a company, user account, access permissions, hosted environment, or billing subscription.</div><div class="s3-actions"><button class="button secondary" data-s3-step="2">Previous</button><button class="button" data-s3-save="1">${icon('check',14)} Save preview locally</button><button class="button secondary" data-s3-reset="1">Start again</button></div>${s.previewSaved?'<p class="s3-saved">✓ Your preview was saved in this browser. No TEKTON account was created.</p>':''}`;
+ return heading('Company onboarding / sandbox','See how TEKTON could fit your company.','Explore onboarding steps, modular software and departmental routing without registration.')+`<section class="card gap-section"><div class="s3-eyebrow">${icon('building',16)} CONFIGURATION SIMULATOR · NOT LIVE ONBOARDING</div>${navbar}<div class="s3-step-body">${body}</div></section><section class="card gap-section"><h2>What real company onboarding will require</h2><div class="s3-requirements">${[['Identity and invitations','Secure registration, verified company administrators and employee invitations.'],['Enforced access permissions','Server-side project membership and maker–checker controls.'],['Import and integrations','Project setup, financial data mapping and existing software connections.'],['Billing and deployment','A verified commercial account, appropriate hosting and support.']].map(([title,desc])=>`<div><strong>${title}</strong><p>${desc}</p></div>`).join('')}</div></section>`;
+}
+
+function s3DocumentCatalog(){
+ const sample=docs().map((d,i)=>({id:'meta-'+i,type:'Reference record',category:d.category,name:d.name,date:d.date,projectId:d.projectId,status:'Metadata only',revision:'Not provided',description:'Fictional document-register entry. The underlying drawing, spreadsheet or PDF is not stored in this demo.',lines:['Record category: '+d.category,'Linked project: '+getProject(d.projectId).name,'Source contents: unavailable in this demonstration']}));
+ const variations=s2Variations().map(v=>({id:'change-'+v.id,type:'Change instruction',category:'Commercial',name:'Change instruction · '+v.id,date:today(),projectId:v.projectId,status:s2VStatus(v),revision:'Demo revision',description:v.reason,lines:['Instruction / RFI reference: '+v.reference,'Technical review: '+(v.technical||'Not assessed'), 'Proposed cost: '+(v.stage>=2?money(v.costDelta):'Under assessment'),'Stage: '+s2VStatus(v),...v.history.map(h=>h.title+' — '+h.who+': '+h.detail)]}));
+ const orders=reqs().filter(r=>r.stage>=4).map(r=>({id:'order-'+r.id,type:'Purchase record',category:'Procurement',name:'Purchase evidence · '+r.id,date:r.date,projectId:r.projectId,status:statusText(r),revision:'Sample record',description:'Illustrative purchase order and supporting approval chain. No real purchase order was issued to a supplier.',lines:['Material: '+r.item,'Quantity: '+r.qty,'Supplier: '+(r.vendor||'Not selected'),'Approved purchase value: '+money(r.qty*r.unitCost), 'Supplier selection: '+(r.selectionReason||'Historical sample record'), ...(r.receipts||[]).map(x=>'Delivery note '+x.note+': '+x.acceptedQty+' accepted of '+x.quantity+' observed'),...r.history.map(h=>h.title+' — '+h.who)]}));
+ const site=reports().map(r=>({id:'site-'+r.id,type:'Site progress report',category:'Site operations',name:'Site report · '+r.id,date:r.date,projectId:r.projectId,status:isPublishedToClient(r)?'Published for client':'Internal only',revision:'Daily log',description:r.summary,lines:['Reported progress: '+r.progress+'%','Submitted by: '+r.author, 'Visibility: '+(isPublishedToClient(r)?'Published':'Internal report'),'This is illustrative progress reporting, not verified construction evidence.']}));
+ return [...sample,...orders,...variations,...site];
+}
+
+function s3DocumentRegister(){
+ const all=s3DocumentCatalog(),filtered=all.filter(d=>(d.name+' '+d.category+' '+getProject(d.projectId).name).toLowerCase().includes((view.query||'').toLowerCase()));
+ return heading('Document intelligence','Each document has a project and a decision.','Open sample records to inspect revision context, commercial evidence and project history. No original files are uploaded.',`<button class="button secondary" data-action="new-doc">${icon('plus',15)} Add register entry</button>`)+`<section class="card gap-section"><div class="section-head"><h2>Project document & evidence register</h2><span class="tag">${filtered.length} sample records</span></div><label class="s3-search-label">Search records<input id="request-search" class="search" type="search" placeholder="Document, project, cost instruction..." value="${esc(view.query||'')}"></label><div class="table-wrap"><table class="data-table"><thead><tr><th>Document record</th><th>Project</th><th>Category</th><th>Status</th><th>Open</th></tr></thead><tbody>${filtered.map(d=>`<tr><td><strong>${esc(d.name)}</strong><br><small>${esc(d.type)}</small></td><td>${esc(getProject(d.projectId).name)}</td><td><span class="tag">${esc(d.category)}</span></td><td>${esc(d.status)}</td><td><button class="button small secondary" data-s3-doc="${esc(d.id)}">View sample</button></td></tr>`).join('')}</tbody></table></div>${filtered.length?'':'<div class="empty">No matching records.</div>'}</section><div class="callout mt-2">These are fictional record previews, not uploaded construction drawings, signed contracts, engineering certificates or actual purchase-order files.</div>`;
+}
+
+function s3DocumentPage(){
+ const d=s3DocumentCatalog().find(x=>x.id===view.s3Doc);
+ if(!d){view.s3Doc='';return s3DocumentRegister()}
+ return heading('Document register / sample','Trace the purpose behind the file.','Illustrative read-only document summary. The real source document is not available.',`<button class="button secondary" data-s3-back="documents">${icon('arrow',14)} Back to register</button>`)+`<section class="s3-document-sheet"><div class="s3-document-top"><img src="../brand/logos/svg/tekton-primary-light.svg" alt="TEKTON" width="154"><span>SAMPLE ONLY · NOT AN AUTHENTIC DOCUMENT</span></div><div class="s3-document-head"><p class="eyebrow">${esc(d.type)} · ${esc(d.category)}</p><h2>${esc(d.name)}</h2><p>${esc(d.description)}</p></div><div class="s3-summary-grid">${[['Project',getProject(d.projectId).name],['Reference',d.id],['Record date',d.date],['Status',d.status],['Revision',d.revision],['Visibility','Internal demo only']].map(([a,b])=>`<div class="s3-summary"><small>${esc(a)}</small><strong>${esc(b)}</strong></div>`).join('')}</div><h3>Illustrative record contents and traceability</h3><div class="s3-document-lines">${d.lines.map((l,i)=>`<p><span>${String(i+1).padStart(2,'0')}</span>${esc(l)}</p>`).join('')}</div><p class="s3-watermark">FICTIONAL SAMPLE · NO ORIGINAL FILE ATTACHED · NO LEGAL OR TECHNICAL VALIDITY</p></section><div class="s3-doc-actions"><button class="button" data-s3-export="doc">${icon('file',15)} Download sample summary (.txt)</button><button class="button secondary" data-s3-print="1">${icon('file',15)} Print / Save as PDF</button></div>`;
+}
+
+function s3ProjectReportIndex(){
+ const ps=getProjects();
+ return heading('Sample project reporting','A credible management handoff, ready to share.','Explore printable illustrative project performance briefs, with budgets, variation history and delivery milestones.')+`<section class="s3-report-grid gap-section">${ps.map(p=>`<article class="s3-report-card"><span class="eyebrow">PROJECT MANAGEMENT BRIEF</span><h2>${esc(p.name)}</h2><p>${esc(p.location)} · ${p.progress}% progress</p><div class="s3-report-facts"><span>Approved budget</span><strong>${money(s2ApprovedBudget(p))}</strong></div><div class="s3-report-facts"><span>Recorded costs</span><strong>${money(s2Spend(p))}</strong></div><button class="button secondary" data-s3-report="${esc(p.id)}">Open report ${icon('arrow',14)}</button></article>`).join('')}</section><p class="disclaimer">Illustrative reports use fictional local data. Text exports and printouts are not certified financial, engineering or construction records.</p>`;
+}
+
+function s3ProjectReportPage(){
+ const p=getProjects().find(x=>x.id===view.s3Report);
+ if(!p){view.s3Report='';return s3ProjectReportIndex()}
+ const budget=s2ApprovedBudget(p),spent=s2Spend(p),commits=s2Commits(p),changes=s2VByProject(p.id),reportsList=reports().filter(r=>r.projectId===p.id),milestones=s2Milestones(p);
+ return heading('Project reporting / sample','Project performance, in context.','Generated from the fictional demo records saved in this browser.',`<button class="button secondary" data-s3-back="reports">${icon('arrow',14)} All sample reports</button>`)+`<section class="s3-document-sheet s3-report-sheet"><div class="s3-document-top"><img src="../brand/logos/svg/tekton-primary-light.svg" alt="TEKTON" width="154"><span>ILLUSTRATIVE MANAGEMENT REPORT</span></div><div class="s3-document-head"><p class="eyebrow">PROJECT PERFORMANCE BRIEF · ${esc(data.activeCompany.toUpperCase())}</p><h2>${esc(p.name)}</h2><p>${esc(p.location)} · ${esc(p.type)} · Project manager: ${esc(p.manager)}</p></div><div class="s3-summary-grid">${[['Contract value',money(p.value)],['Baseline budget',money(p.budget)],['Approved changes',money(budget-p.budget)],['Revised budget',money(budget)],['Recorded costs',money(spent)],['Open PO commitments',money(commits)],['Uncommitted balance',money(budget-spent-commits)],['Reported progress',p.progress+'%']].map(([a,b])=>`<div class="s3-summary"><small>${esc(a)}</small><strong>${esc(b)}</strong></div>`).join('')}</div><h3>Delivery milestones</h3><div class="s3-document-lines">${milestones.map(x=>`<p><span>${esc(x.period)}</span>${esc(x.name)} — ${esc(x.status)}</p>`).join('')}</div><h3>Change control summary</h3><div class="s3-document-lines">${changes.map(v=>`<p><span>${esc(v.id)}</span>${esc(v.title)} — ${esc(s2VStatus(v))}${v.stage===5?' · '+money(v.costDelta):''}</p>`).join('')||'<p>No changes recorded.</p>'}</div><h3>Latest site updates</h3><div class="s3-document-lines">${reportsList.slice(-3).reverse().map(r=>`<p><span>${esc(r.id)}</span>${esc(r.summary)}</p>`).join('')||'<p>No reports recorded.</p>'}</div><p class="s3-watermark">FICTIONAL PROJECT DATA · NOT AN ACCOUNTING STATEMENT OR CERTIFIED SITE REPORT</p></section><div class="s3-doc-actions"><button class="button" data-s3-export="report">Download report summary (.txt)</button><button class="button secondary" data-s3-print="1">Print / Save as PDF</button></div>`;
+}
+
+function s3TextExport(){
+ if(view.s3Doc){const d=s3DocumentCatalog().find(x=>x.id===view.s3Doc);if(!d)return null;return {filename:'TEKTON-sample-'+d.id+'.txt',text:['TEKTON / FICTIONAL DOCUMENT SUMMARY','NOT AN AUTHENTIC DOCUMENT','',d.name,'Project: '+getProject(d.projectId).name,'Type: '+d.type,'Status: '+d.status,'Revision: '+d.revision,'',d.description,'',...d.lines,'','No original source file attached.'].join('\n')}}
+ if(view.s3Report){const p=getProjects().find(x=>x.id===view.s3Report);if(!p)return null;return {filename:'TEKTON-project-brief-'+p.id+'.txt',text:['TEKTON / FICTIONAL PROJECT MANAGEMENT BRIEF','NOT A CERTIFIED CONSTRUCTION OR FINANCIAL REPORT','',p.name,p.location,'Manager: '+p.manager,'Contract: '+money(p.value),'Baseline budget: '+money(p.budget),'Applied changes: '+money(s2ApprovedBudget(p)-p.budget),'Approved budget: '+money(s2ApprovedBudget(p)),'Recorded costs: '+money(s2Spend(p)),'Open commitments: '+money(s2Commits(p)),'Progress: '+p.progress+'%','',...s2Milestones(p).map(m=>m.name+' — '+m.status),'',...s2VByProject(p.id).map(v=>v.id+' '+v.title+' — '+s2VStatus(v))].join('\n')}}
+ return null;
+}
+
+function s3SaveTextFile(){
+ const d=s3TextExport();if(!d)return;
+ const blob=new Blob([d.text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=d.filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+
+function s3Events(){
+ document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-s3-step],[data-s3-toggle],[data-s3-next],[data-s3-limit],[data-s3-save],[data-s3-reset],[data-s3-doc],[data-s3-report],[data-s3-back],[data-s3-print],[data-s3-export]');
+  if(!el)return;
+  e.stopImmediatePropagation();
+  if(roleIsClient())return;
+  const ds=el.dataset,s=data.s3Setup;
+  if(ds.s3Step!==undefined){const n=Number(ds.s3Step);if(n>=0&&n<=3&&(n<=s.step||s.previewSaved)){s.step=n;save();render()}return}
+  if(ds.s3Toggle){const m=ds.s3Toggle;if(m!=='projects'&&s3Modules().some(x=>x.id===m)){s.modules=s.modules.includes(m)?s.modules.filter(x=>x!==m):[...s.modules,m];s.previewSaved=false;save();render()}return}
+  if(ds.s3Next!==undefined){s.step=Math.min(3,Math.max(0,Number(ds.s3Next)));s.previewSaved=false;save();render();return}
+  if(ds.s3Limit){if([10000,50000,100000].includes(Number(ds.s3Limit))){s.approvalLimit=Number(ds.s3Limit);s.previewSaved=false;save();render()}return}
+  if(ds.s3Save){s.previewSaved=true;save();render();notify('Configuration preview saved in this browser only');return}
+  if(ds.s3Reset){data.s3Setup=s3DefaultSetup();save();render();return}
+  if(ds.s3Doc){const d=s3DocumentCatalog().find(x=>x.id===ds.s3Doc);if(!d)return;view.s3Doc=d.id;view.s3Report='';view.query='';data.page='documents';render();return}
+  if(ds.s3Report){if(!getProjects().some(p=>p.id===ds.s3Report))return;view.s3Report=ds.s3Report;view.s3Doc='';data.page='reports';render();return}
+  if(ds.s3Back){view.s3Doc='';view.s3Report='';render();return}
+  if(ds.s3Print){window.print();return}
+  if(ds.s3Export){s3SaveTextFile();return}
+ });
+ document.addEventListener('submit',e=>{
+  if(e.target.id!=='s3-profile-form')return;
+  e.preventDefault();e.stopImmediatePropagation();if(roleIsClient())return;
+  const f=new FormData(e.target),name=String(f.get('name')||'').trim(),type=String(f.get('type')),region=String(f.get('region')),size=String(f.get('size'));
+  if(name.length<3||name.length>90||!["General contractor","Developer","Engineering consultant","Infrastructure contractor","Specialist subcontractor"].includes(type)||!["Nigeria","East Africa","West Africa","Europe","North America","Other"].includes(region)||!["1–24 employees","25–100 employees","101–500 employees","500+ employees"].includes(size))return notify('Check the fictional company profile details.');
+  Object.assign(data.s3Setup,{name,type,region,size,step:1,previewSaved:false});save();render();
+ });
+}
+s3Events();
