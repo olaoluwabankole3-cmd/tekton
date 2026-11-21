@@ -8,3 +8,5 @@
 - `icons/png/favicon-64.png` - 64px browser PNG.
 
 **High-resolution presentation PNGs, a multi-size ICO favicon, and exploratory mockup boards** are supplied in the separately downloadable full ZIP archive. The SVG files above are the long-term portable master artwork for all raster exports.
+
+**Version 2.0 notice:** All PNG icon exports were replaced with corrected non-overlapping geometry. Old versions in Git history should not be reused.

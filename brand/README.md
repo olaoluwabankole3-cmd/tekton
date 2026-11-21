@@ -1,4 +1,4 @@
-# TEKTON — Brand Identity Kit v1.0
+# TEKTON — Brand Identity Kit v2.0
 
 **Brand direction approved:** 21 November 2026.  
 **Status:** Editable visual identity system; TEKTON remains a provisional name pending legal clearance.
@@ -53,3 +53,7 @@ These assets are independent of the current live site; merely adding the kit doe
 ## Legal caveat
 
 The product name **TEKTON** has potential marketplace naming conflicts; secure professional construction-software trademark and domain clearance before commercial use. Do not display trademark registration marks unless legally appropriate.
+
+## Mandatory v2.0 geometry correction
+
+The previous design had an unintended roof-to-pillar overlap. **Do not use any pre-v2 logo**. All authoritative SVG masters, on-repo PNG icons, templates and the revised PDF guide now use a detached pillar and visible negative space. The checked geometry and source coordinates are in [`guidelines/logo-geometry-QA.json`](guidelines/logo-geometry-QA.json). The complete high-resolution raster logo exports are supplied in the downloadable corrected v2 brand archive.

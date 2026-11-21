@@ -1,6 +1,6 @@
 {
   "name": "TEKTON Brand Kit",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "date": "2026-11-21",
   "authoritative_color_source": "tokens/tekton.tokens.json",
   "authoritative_logo_source": "logos/svg/tekton-primary-light.svg",
@@ -30,5 +30,8 @@
     "brand/tokens/tekton-color-codes.csv",
     "brand/tokens/tekton.css",
     "brand/tokens/tekton.tokens.json"
-  ]
+  ],
+  "replaces": "1.0.0",
+  "geometryQA": "guidelines/logo-geometry-QA.json",
+  "officialPDF": "guidelines/TEKTON_Brand_Guidelines.pdf"
 }
