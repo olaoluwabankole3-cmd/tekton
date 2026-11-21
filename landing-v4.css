@@ -164,3 +164,7 @@ body{overflow-x:clip}
 @keyframes v4-stage-pulse{0%,100%{opacity:1}50%{opacity:.55}}
 @keyframes v4-status-pulse{0%,100%{box-shadow:0 0 0 4px #C1C1BE26}50%{box-shadow:0 0 0 9px #C1C1BE12}}
 @media (prefers-reduced-motion:reduce){.hero-photo,.hero-stage-track span,.experience-status-dot,.experience-phone{animation:none!important;transition:none!important}}
+
+/* Header breakpoint refinement after the earlier sprint overrides */
+@media(max-width:700px){.main-nav{top:69px;max-height:calc(100dvh - 69px);overflow-y:auto}.main-nav a{min-height:44px;display:flex;align-items:center}}
+@media(max-width:420px){.hero-scroll-cue{margin-top:23px}.sector-inner{width:calc(100% - 26px)}}
