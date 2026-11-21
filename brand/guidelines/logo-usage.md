@@ -1,12 +1,3 @@
-# TEKTON — Logo and icon rules
+# TEKTON Logo Usage (v2.0)
 
-1. Use `tekton-primary-light.svg` for light and off-white surfaces.
-2. Use `tekton-primary-dark.svg` for charcoal backgrounds.
-3. Use the standalone icon only for favicons, small app tiles and compact UI where the wordmark is absent.
-4. Maintain clear space equal to **at least 25% of the icon width** on all sides.
-5. Recommended minimum horizontal logo width **140 px screen / 30 mm print**; standalone symbol **24 px** screen.
-6. Do not rotate, stretch, add bevels, gradients, glow, shadow, or recolour the official logo.
-7. **SVG is the source of truth.** If the user device does not have Inter, the SVG wordmark uses Arial fallback; use exported PNG for consistent raster reproduction.
-8. All artwork is transparent unless a file is explicitly named `app-icon`.
-
-**Vector realization:** The icon is formed from two roof-like structural beams and a vertical T support, referencing engineered form and the construction environment.
+Use `tekton-primary-light.svg` on off-white backgrounds, `tekton-primary-dark.svg` on charcoal surfaces, and the detached icon for compact applications. The beams must meet at their apex, while the pillar must remain visibly separated below them. The shapes **must never overlap**. Minimum digital horizontal logo width: 140 px; standalone icon minimum 24 px. Maintain a free zone of at least 25% of the icon's width on every side. Do not recolour, rotate, stretch, bevel or add shadows. Inter is the typographic reference; no font binaries are distributed. All v1 overlapping mark assets are deprecated.
