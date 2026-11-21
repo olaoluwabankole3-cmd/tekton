@@ -2,6 +2,6 @@
    Configure ONLY after creating a DEDICATED TEKTON Supabase project.
    This file is public in the browser; the publishable key is safe only WITH RLS. */
 window.TEKTON_ENV = Object.freeze({
-  supabaseUrl: "",
-  supabasePublishableKey: "",
+  supabaseUrl: "https://fryyptustahhuuoorfet.supabase.co",
+  supabasePublishableKey: "sb_publishable_Q74UeXypJDgymmDfAhctdA_nkOhlz5m",
 });
