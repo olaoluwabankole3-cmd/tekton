@@ -28,7 +28,7 @@ test('tenant membership predicates do not trust user-editable metadata',()=>{
 });
 test('maker-checker is independent, sequential, and prevents double application',()=>{
  for(const s of ['Maker cannot approve own request','Each approval must be made by an independent checker',
-   'Earlier approvals are required','r.applied_at is not null'])assert.ok(sql.includes(s),s);
+   'Earlier approvals are required','r.applied_at is not null',"v_role<>s.assigned_role"])assert.ok(sql.includes(s),s);
 });
 test('storage is private and folder ownership is enforced',()=>{
  for(const s of ["'tekton-project-private',false",'tekton_can_upload_path','tekton_can_read_file',

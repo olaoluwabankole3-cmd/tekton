@@ -409,9 +409,9 @@ begin
   if v_role<>'client' or not private.tekton_can_read_project(r.organization_id,r.project_id)
   then raise exception 'Assigned client consent required' using errcode='42501'; end if;
  elsif s.assigned_role='owner' then
-  if v_role not in ('owner','admin') then raise exception 'Director approval required' using errcode='42501'; end if;
- elsif v_role not in (s.assigned_role,'owner','admin') then
-  raise exception 'Required departmental role is missing' using errcode='42501'; end if;
+  if v_role<>'owner' then raise exception 'Director approval required' using errcode='42501'; end if;
+ elsif v_role<>s.assigned_role then
+  raise exception 'The specific departmental checker role is required' using errcode='42501'; end if;
  update public.tekton_approval_steps
   set decision=p_decision,decided_by=v_uid,decided_at=now(),note=left(coalesce(p_note,''),1000)
   where id=s.id;
