@@ -1,0 +1,23 @@
+/* TEKTON design tokens v1.0 / 2026-11-21 */
+:root {
+  --tekton-charcoal: #1F1F1F;
+  --tekton-slate: #3A3A3A;
+  --tekton-graphite: #6B6B6B;
+  --tekton-ash: #D4D4D4;
+  --tekton-concrete-white: #F5F5F2;
+  --tekton-surface: #E9E9E7;
+  --tekton-border: #DADADA;
+  --tekton-white: #FFFFFF;
+  --tekton-font: Inter, Arial, sans-serif;
+  --tekton-radius-small: 6px;
+  --tekton-radius-medium: 10px;
+  --tekton-radius-large: 16px;
+  --tekton-space-1: 4px;
+  --tekton-space-2: 8px;
+  --tekton-space-3: 12px;
+  --tekton-space-4: 16px;
+  --tekton-space-6: 24px;
+  --tekton-space-8: 32px;
+  --tekton-space-12: 48px;
+  --tekton-space-16: 64px;
+}

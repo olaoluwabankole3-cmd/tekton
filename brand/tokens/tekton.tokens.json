@@ -1,0 +1,119 @@
+{
+  "name": "TEKTON",
+  "version": "1.0.0",
+  "updated": "2026-11-21",
+  "status": "Working brand pending trademark clearance",
+  "color": {
+    "charcoal": {
+      "$type": "color",
+      "$value": "#1F1F1F",
+      "rgb": "rgb(31, 31, 31)",
+      "cmyk_approx_percent": [
+        0,
+        0,
+        0,
+        88
+      ]
+    },
+    "slate": {
+      "$type": "color",
+      "$value": "#3A3A3A",
+      "rgb": "rgb(58, 58, 58)",
+      "cmyk_approx_percent": [
+        0,
+        0,
+        0,
+        77
+      ]
+    },
+    "graphite": {
+      "$type": "color",
+      "$value": "#6B6B6B",
+      "rgb": "rgb(107, 107, 107)",
+      "cmyk_approx_percent": [
+        0,
+        0,
+        0,
+        58
+      ]
+    },
+    "ash": {
+      "$type": "color",
+      "$value": "#D4D4D4",
+      "rgb": "rgb(212, 212, 212)",
+      "cmyk_approx_percent": [
+        0,
+        0,
+        0,
+        17
+      ]
+    },
+    "concrete-white": {
+      "$type": "color",
+      "$value": "#F5F5F2",
+      "rgb": "rgb(245, 245, 242)",
+      "cmyk_approx_percent": [
+        0,
+        0,
+        1,
+        4
+      ]
+    },
+    "surface": {
+      "$type": "color",
+      "$value": "#E9E9E7",
+      "rgb": "rgb(233, 233, 231)",
+      "cmyk_approx_percent": [
+        0,
+        0,
+        1,
+        9
+      ]
+    },
+    "border": {
+      "$type": "color",
+      "$value": "#DADADA",
+      "rgb": "rgb(218, 218, 218)",
+      "cmyk_approx_percent": [
+        0,
+        0,
+        0,
+        15
+      ]
+    },
+    "white": {
+      "$type": "color",
+      "$value": "#FFFFFF",
+      "rgb": "rgb(255, 255, 255)",
+      "cmyk_approx_percent": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "font": {
+    "family": "Inter, Arial, sans-serif",
+    "regular": 400,
+    "medium": 500,
+    "semibold": 600,
+    "bold": 700
+  },
+  "radius": {
+    "sm": "6px",
+    "md": "10px",
+    "lg": "16px",
+    "pill": "999px"
+  },
+  "space": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "6": "24px",
+    "8": "32px",
+    "12": "48px",
+    "16": "64px"
+  }
+}

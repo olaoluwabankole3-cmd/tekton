@@ -18,3 +18,7 @@ The demo uses fictional construction records and browser-local state. It is not 
 ## Naming
 
 TEKTON remains a provisional working name pending trademark clearance.
+
+## Brand identity
+
+The approved charcoal/ash TEKTON identity is archived in [`brand/`](brand/README.md), including vector marks, exact palette codes, design tokens and usage guidelines. The website and demo have not yet been visually migrated to the new kit.
