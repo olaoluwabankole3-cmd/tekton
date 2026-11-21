@@ -1,3 +1,10 @@
-# TEKTON Logo Usage (v2.0)
+# TEKTON logo usage — v3.0
 
-Use `tekton-primary-light.svg` on off-white backgrounds, `tekton-primary-dark.svg` on charcoal surfaces, and the detached icon for compact applications. The beams must meet at their apex, while the pillar must remain visibly separated below them. The shapes **must never overlap**. Minimum digital horizontal logo width: 140 px; standalone icon minimum 24 px. Maintain a free zone of at least 25% of the icon's width on every side. Do not recolour, rotate, stretch, bevel or add shadows. Inter is the typographic reference; no font binaries are distributed. All v1 overlapping mark assets are deprecated.
+1. Use the primary SVG on a light or concrete-white background; reversed SVG on Charcoal.
+2. Keep the icon and wordmark locked together: never enlarge the icon, extend the stem or reposition its pieces.
+3. Other light, dark, monochrome, tagline, favicon and app-icon variants all share the same canonical geometry.
+4. Keep at least one quarter of the icon width as free external space.
+5. Use the provided PNG for fixed presentation images and SVG for editable scalable artwork.
+6. Do not distort, rotate, bevel, recolour or add glows/shadows.
+7. Do not claim registered trademark status.
+8. v1 and v2 proportions are retired.

@@ -1,0 +1,91 @@
+{
+  "version": "3.0.0",
+  "reference": "Approved TEKTON brand logo-system page-2 screenshot",
+  "source_size_px": [
+    1672,
+    941
+  ],
+  "tolerance": "Visible-pixel reconstruction, approximately ±1px; native design source not available",
+  "viewBox": [
+    0,
+    0,
+    440,
+    145
+  ],
+  "roof_left": [
+    [
+      2,
+      43
+    ],
+    [
+      75,
+      4
+    ],
+    [
+      75,
+      35
+    ],
+    [
+      2,
+      75
+    ]
+  ],
+  "roof_right": [
+    [
+      75,
+      4
+    ],
+    [
+      126,
+      34
+    ],
+    [
+      125,
+      63
+    ],
+    [
+      75,
+      35
+    ]
+  ],
+  "pillar": [
+    [
+      45,
+      70
+    ],
+    [
+      80,
+      50
+    ],
+    [
+      80,
+      118
+    ],
+    [
+      45,
+      140
+    ]
+  ],
+  "ink_bounding_box_symbol": [
+    2,
+    4,
+    126,
+    140
+  ],
+  "ink_bounding_box_wordmark": [
+    149,
+    51,
+    434,
+    103
+  ],
+  "symbol_width": 124,
+  "symbol_height": 136,
+  "wordmark_width": 285,
+  "wordmark_height": 52,
+  "horizontal_internal_gap": 23,
+  "symbol_wordmark_height_ratio": 2.6153846153846154,
+  "roof_pillar_overlap_area": 0,
+  "roof_pillar_clearance": 10.645,
+  "letterform_method": "Visible screenshot pixel contours with rounded O and reconstructed N paths",
+  "warning": "Do not extend the pillar or alter the symbol-to-wordmark ratio"
+}
