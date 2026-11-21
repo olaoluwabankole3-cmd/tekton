@@ -36,3 +36,7 @@ The demonstration now includes a first-visit onboarding guide, direct guided pro
 ## Sprint 2 — Construction operations depth
 
 Sample project workspaces now include BOQ/cost-code packages, delivery milestones and variation status. Variations progress through Project Management, Quantity Surveying, Executive authorization, client consent and final application. Only applied changes affect approved budgets. Procurement now demonstrates fictional quotation comparisons, partial goods receipt with delivery-note references and simulated invoice matching, without actual payment or supplier systems. All data remains browser-local.
+
+## Sprint 3 — Enterprise sales readiness
+
+The `/demo/` application now includes an onboarding preview (company profile, module selection, departmental approval route), a rich fictional document evidence register, and printable/downloadable sample management briefs. The `/pilot/` public route prepares a user-initiated enquiry; it has no configured inbox or server-side lead capture. No real company account is created and all demo configuration remains browser-local. The core brand/logo and existing public domain remain unchanged.
