@@ -1,10 +1,10 @@
 # TEKTON — Backend and tenant security acceptance plan
 
-This plan covers the new isolated `platform/` application. The public `/demo/` remains fictional and unchanged.
+This plan covers the new isolated `platform/` application. The public `/demo/` remains fictional and unchanged. See `docs/engineering-release-status.md` for the current ApexSync TEKTON database and Vercel staging status.
 
 ## Status
 - **Implemented in GitHub:** versioned PostgreSQL migration, Supabase Auth browser client, project and financial-control separation, membership/project isolation, private storage, approval state machine, audit events, and offline CI checks.
-- **Not yet done:** create a **dedicated** Supabase TEKTON project; apply migrations; test with real users and database advisors; provision staging; deploy authentic platform; accept real tenant data.
+- **Completed on 2026-11-21:** create dedicated TEKTON Supabase, apply two migrations, run advisors, configure protected ApexSync staging; **still pending:** real-user authorization tests, Auth redirect configuration, operational checks, production acceptance.
 - Do **not** use Converge, ALIENTO, NECore, or another app's Supabase project.
 
 ## Apply to a dedicated database
