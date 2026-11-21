@@ -290,7 +290,7 @@ begin
 end; $$;
 create or replace function public.tekton_create_project(
  p_org uuid,p_code text,p_name text,p_stage text,p_baseline_budget numeric default 0)
-returns uuid language plpgsql security definer set search_path='' as $
+returns uuid language plpgsql security definer set search_path='' as $$
 declare v_id uuid;v_uid uuid:=(select auth.uid());
 begin
  if v_uid is null or private.tekton_role(p_org) not in ('owner','admin','project_manager')
@@ -306,10 +306,10 @@ begin
  insert into public.tekton_audit_events(organization_id,project_id,actor_id,event_type,details)
  values(p_org,v_id,v_uid,'project.created',jsonb_build_object('code',p_code,'budget',p_baseline_budget));
  return v_id;
-end; $;
+end; $$;
 create or replace function public.tekton_update_project_progress(
  p_project uuid,p_progress integer,p_reason text)
-returns uuid language plpgsql security definer set search_path='' as $
+returns uuid language plpgsql security definer set search_path='' as $$
 declare v_org uuid;v_uid uuid:=(select auth.uid());
 begin
  select organization_id into v_org from public.tekton_projects where id=p_project;
@@ -323,7 +323,7 @@ begin
  values(v_org,p_project,v_uid,'project.progress_updated',
  jsonb_build_object('progress',p_progress,'reason',left(p_reason,400)));
  return p_project;
-end; $;
+end; $$;
 
 create or replace function public.tekton_add_existing_member(p_org uuid,p_user uuid,p_role text)
 returns void language plpgsql security definer set search_path='' as $$
