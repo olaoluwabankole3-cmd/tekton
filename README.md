@@ -23,7 +23,7 @@ TEKTON remains a provisional working name pending trademark clearance.
 
 The current approved TEKTON brand artwork is **v3.0**: exact visible proportions reconstructed from the supplied page-2 logo reference, with the shorter detached pillar and the original icon-to-wordmark balance. The master vector source and printable guidelines are in [brand/](brand/README.md). Older v1/v2 marks are superseded.
 
-The existing static landing page and demo have **not** been visually rebranded in this asset-only update.
+This historical v3 asset-note has been superseded: the current website and demo both use the approved TEKTON brand identity.
 
 ## TEKTON v3 application brand integration
 

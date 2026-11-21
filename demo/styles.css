@@ -53,3 +53,7 @@
 @media print{body{background:#fff!important}body *{visibility:hidden!important}.s3-document-sheet,.s3-document-sheet *{visibility:visible!important}.s3-document-sheet{position:absolute;top:0;left:0;width:100%;padding:12mm!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important}.s3-document-top img{max-width:150px!important}.s3-document-sheet .s3-watermark{color:#555!important}.site-back,.sidebar,.topbar,.s3-doc-actions{display:none!important}@page{size:A4;margin:12mm}}
 
 .s3-pilot-sidebar{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:12px 13px;margin-top:10px;border:1px solid #555;border-radius:9px;color:#F5F5F2!important;font-size:11px;font-weight:700;text-decoration:none;min-height:43px}.s3-pilot-sidebar:hover{background:#3A3A3A}.s3-pilot-sidebar svg{width:14px;height:14px}@media(max-width:650px){.site-back{bottom:calc(12px + env(safe-area-inset-bottom));right:12px;padding:11px 12px;border-radius:9px;font-size:10px;max-width:180px;text-align:center}.button,.button.secondary,.button.small{min-height:42px}}
+
+/* Sprint 3 QA: all newly added navigation remains reachable on short laptop screens */
+@media(max-height:820px){.sidebar{overflow-y:auto;overscroll-behavior:contain}.sidebar .nav{overflow:visible;flex-shrink:0}.sidebar-bottom{margin-top:12px;flex-shrink:0}}
+@media(max-width:920px){.sidebar{overflow-y:auto;overscroll-behavior:contain}.sidebar .nav{overflow:visible;flex-shrink:0}}
