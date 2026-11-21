@@ -30,14 +30,23 @@ create table public.tekton_projects (
  code text not null check(length(btrim(code)) between 2 and 30),
  name text not null check(length(btrim(name)) between 3 and 150),
  stage text not null default 'planning' check(stage in ('planning','active','on_hold','completed','cancelled')),
- baseline_budget numeric(18,2) not null default 0 check(baseline_budget>=0),
- progress smallint not null default 0 check(progress between 0 and 100),
  created_by uuid not null references auth.users(id),
  created_at timestamptz not null default now(),
  unique(organization_id,id),
  unique(organization_id,code)
 );
 create index tekton_projects_org_idx on public.tekton_projects(organization_id,stage);
+-- Isolated from client-readable project attributes.
+create table public.tekton_project_controls (
+ organization_id uuid not null,
+ project_id uuid not null,
+ baseline_budget numeric(18,2) not null default 0 check(baseline_budget>=0),
+ progress smallint not null default 0 check(progress between 0 and 100),
+ updated_by uuid not null references auth.users(id),
+ updated_at timestamptz not null default now(),
+ primary key(organization_id,project_id),
+ foreign key(organization_id,project_id) references public.tekton_projects(organization_id,id) on delete cascade
+);
 create table public.tekton_project_memberships (
  organization_id uuid not null,
  project_id uuid not null,
@@ -184,6 +193,7 @@ grant execute on all functions in schema private to authenticated;
 alter table public.tekton_organizations enable row level security;
 alter table public.tekton_memberships enable row level security;
 alter table public.tekton_projects enable row level security;
+alter table public.tekton_project_controls enable row level security;
 alter table public.tekton_project_memberships enable row level security;
 alter table public.tekton_documents enable row level security;
 alter table public.tekton_workflows enable row level security;
@@ -200,14 +210,9 @@ create policy "members read self or admins" on public.tekton_memberships
  (select private.tekton_role(organization_id)) in ('owner','admin'));
 create policy "projects scoped read" on public.tekton_projects
  for select to authenticated using ((select private.tekton_can_read_project(organization_id,id)));
-create policy "project management create" on public.tekton_projects
- for insert to authenticated with check (
- created_by=(select auth.uid()) and
- (select private.tekton_role(organization_id)) in ('owner','admin','project_manager'));
-create policy "project management update" on public.tekton_projects
- for update to authenticated
- using ((select private.tekton_role(organization_id)) in ('owner','admin','project_manager'))
- with check ((select private.tekton_role(organization_id)) in ('owner','admin','project_manager'));
+create policy "project controls internal read" on public.tekton_project_controls
+ for select to authenticated using ((select private.tekton_role(organization_id)) in
+ ('owner','admin','project_manager','site_engineer','quantity_surveyor','procurement','finance','storekeeper'));
 create policy "project memberships restricted read" on public.tekton_project_memberships
  for select to authenticated using (user_id=(select auth.uid()) or
  (select private.tekton_role(organization_id)) in ('owner','admin','project_manager'));
@@ -239,15 +244,14 @@ create policy "audit internal member read" on public.tekton_audit_events
 
 -- Grant only required API operations. Authenticated is NOT authorization; RLS is.
 revoke all on public.tekton_organizations,public.tekton_memberships,
- public.tekton_projects,public.tekton_project_memberships,public.tekton_documents,
+ public.tekton_projects,public.tekton_project_controls,public.tekton_project_memberships,public.tekton_documents,
  public.tekton_workflows,public.tekton_approval_steps,public.tekton_audit_events
  from anon,authenticated;
 grant select on public.tekton_organizations,public.tekton_memberships,
- public.tekton_projects,public.tekton_project_memberships,public.tekton_documents,
+ public.tekton_projects,public.tekton_project_controls,public.tekton_project_memberships,public.tekton_documents,
  public.tekton_workflows,public.tekton_approval_steps,public.tekton_audit_events to authenticated;
 grant update(name) on public.tekton_organizations to authenticated;
-grant insert(organization_id,code,name,stage,baseline_budget,progress,created_by) on public.tekton_projects to authenticated;
-grant update(name,stage,progress) on public.tekton_projects to authenticated;
+-- All project and financial creation goes through audited server-side RPC.
 grant insert(organization_id,project_id,storage_path,file_name,mime_type,bytes,uploaded_by)
  on public.tekton_documents to authenticated;
 
@@ -284,6 +288,43 @@ begin
  values(v_id,v_uid,'owner');
  return v_id;
 end; $$;
+create or replace function public.tekton_create_project(
+ p_org uuid,p_code text,p_name text,p_stage text,p_baseline_budget numeric default 0)
+returns uuid language plpgsql security definer set search_path='' as $
+declare v_id uuid;v_uid uuid:=(select auth.uid());
+begin
+ if v_uid is null or private.tekton_role(p_org) not in ('owner','admin','project_manager')
+ then raise exception 'Project administrator access required' using errcode='42501'; end if;
+ if length(btrim(p_code)) not between 2 and 30 or length(btrim(p_name)) not between 3 and 150
+  or p_stage not in ('planning','active','on_hold')
+  or p_baseline_budget is null or p_baseline_budget<0 or p_baseline_budget>1000000000
+ then raise exception 'Invalid project details'; end if;
+ insert into public.tekton_projects(organization_id,code,name,stage,created_by)
+ values(p_org,btrim(p_code),btrim(p_name),p_stage,v_uid) returning id into v_id;
+ insert into public.tekton_project_controls(organization_id,project_id,baseline_budget,updated_by)
+ values(p_org,v_id,p_baseline_budget,v_uid);
+ insert into public.tekton_audit_events(organization_id,project_id,actor_id,event_type,details)
+ values(p_org,v_id,v_uid,'project.created',jsonb_build_object('code',p_code,'budget',p_baseline_budget));
+ return v_id;
+end; $;
+create or replace function public.tekton_update_project_progress(
+ p_project uuid,p_progress integer,p_reason text)
+returns uuid language plpgsql security definer set search_path='' as $
+declare v_org uuid;v_uid uuid:=(select auth.uid());
+begin
+ select organization_id into v_org from public.tekton_projects where id=p_project;
+ if v_uid is null or private.tekton_role(v_org) not in ('owner','admin','project_manager','site_engineer')
+ then raise exception 'Site or project management access required' using errcode='42501'; end if;
+ if p_progress is null or p_progress<0 or p_progress>100 or length(btrim(coalesce(p_reason,'')))<8
+ then raise exception 'A valid progress value and explanation are required'; end if;
+ update public.tekton_project_controls set progress=p_progress,updated_at=now(),updated_by=v_uid
+ where organization_id=v_org and project_id=p_project;
+ insert into public.tekton_audit_events(organization_id,project_id,actor_id,event_type,details)
+ values(v_org,p_project,v_uid,'project.progress_updated',
+ jsonb_build_object('progress',p_progress,'reason',left(p_reason,400)));
+ return p_project;
+end; $;
+
 create or replace function public.tekton_add_existing_member(p_org uuid,p_user uuid,p_role text)
 returns void language plpgsql security definer set search_path='' as $$
 declare v_existing text;
@@ -414,6 +455,8 @@ begin
  return d.id;
 end; $$;
 revoke execute on function public.tekton_create_organization(text,text) from public,anon;
+revoke execute on function public.tekton_create_project(uuid,text,text,text,numeric) from public,anon;
+revoke execute on function public.tekton_update_project_progress(uuid,integer,text) from public,anon;
 revoke execute on function public.tekton_add_existing_member(uuid,uuid,text) from public,anon;
 revoke execute on function public.tekton_assign_project_client(uuid,uuid,uuid) from public,anon;
 revoke execute on function public.tekton_create_workflow(uuid,text,text,text,numeric,integer) from public,anon;
@@ -421,6 +464,8 @@ revoke execute on function public.tekton_decide_workflow(uuid,text,text) from pu
 revoke execute on function public.tekton_apply_variation(uuid) from public,anon;
 revoke execute on function public.tekton_publish_document(uuid) from public,anon;
 grant execute on function public.tekton_create_organization(text,text) to authenticated;
+grant execute on function public.tekton_create_project(uuid,text,text,text,numeric) to authenticated;
+grant execute on function public.tekton_update_project_progress(uuid,integer,text) to authenticated;
 grant execute on function public.tekton_add_existing_member(uuid,uuid,text) to authenticated;
 grant execute on function public.tekton_assign_project_client(uuid,uuid,uuid) to authenticated;
 grant execute on function public.tekton_create_workflow(uuid,text,text,text,numeric,integer) to authenticated;
