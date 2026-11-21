@@ -1,0 +1,22 @@
+name: TEKTON Foundation Security Checks
+on:
+  push:
+    branches: [engineering/tenant-auth-foundation]
+  pull_request:
+    paths:
+      - 'platform/**'
+      - 'supabase/**'
+      - 'tests/**'
+      - '.github/workflows/tekton-foundation.yml'
+jobs:
+  offline-static-verification:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate RLS migration, security boundaries, and frontend syntax
+        run: node --test tests/foundation.test.mjs
