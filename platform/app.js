@@ -39,7 +39,7 @@ function orgChooser(){
  '<div class="grid">'+cards+'</div><section class="form-panel" style="margin-top:18px"><h2>Create a new organization</h2><p>Creates a separate tenant in the dedicated TEKTON database for your verified account.</p><form id="new-org-form"><div class="form-grid"><label class="field">Organization name<input name="name" minlength="3" maxlength="120" required></label><label class="field">Unique slug<input name="slug" pattern="[a-z0-9]+(-[a-z0-9]+)*" minlength="3" maxlength="48" placeholder="my-construction-company" required></label></div><button class="btn" type="submit">Create tenant</button></form></section>';
 }
 function projectList(){
- const rows=projects.map(p=>'<tr><td><strong>'+h(p.name)+'</strong><small>'+h(p.code)+'</small></td><td>'+h(p.stage)+'</td><td>'+h(p.progress)+'%</td><td>'+money(p.baseline_budget)+'</td><td><button class="btn btn-light" data-project="'+h(p.id)+'">Open project</button></td></tr>').join('');
+ const rows=projects.map(p=>'<tr><td><strong>'+h(p.name)+'</strong><small>'+h(p.code)+'</small></td><td>'+h(p.stage)+'</td><td>'+(p.progress==null?'Internal only':h(p.progress)+'%')+'</td><td>'+(p.baseline_budget==null?'Internal only':money(p.baseline_budget))+'</td><td><button class="btn btn-light" data-project="'+h(p.id)+'">Open project</button></td></tr>').join('');
  let newProject=manager()?'<section class="form-panel"><h2>Add a project</h2><p>Creates a real project row, subject to PostgreSQL organization membership policies.</p><form id="new-project-form"><div class="form-grid"><label class="field">Project code<input name="code" minlength="2" maxlength="30" required></label><label class="field">Project name<input name="name" minlength="3" maxlength="150" required></label><label class="field">Baseline budget (USD)<input name="budget" type="number" min="0" max="1000000000" step="0.01" required></label><label class="field">Stage<select name="stage"><option>planning</option><option>active</option><option>on_hold</option></select></label></div><button class="btn" type="submit">Create project</button></form></section>':'';
  let rowsPanel=rows?'<div class="table-wrap"><table><thead><tr><th>Project</th><th>Stage</th><th>Progress</th><th>Baseline</th><th>View</th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<div class="empty">No authorized projects yet. Create a project or request access from an organization administrator.</div>';
  return header('Project delivery','Company projects','The database, not a role-switching dropdown, controls which projects you can see.')+newProject+rowsPanel;
@@ -47,11 +47,16 @@ function projectList(){
 function projectDetails(){
  const p=projects.find(p=>p.id===selectedProjectId);
  if(!p)return projectList();
+ if(activeRole==='client')return header('Assigned project',p.name,p.code+' · '+p.stage,
+ '<button class="btn btn-light" data-projectback="1">All assigned projects</button>')+
+ '<div class="panel"><h2>Published project evidence</h2><p>Internal budgets and draft progress are not available to client accounts. Open Documents to view files explicitly published to this assigned project.</p><button class="btn btn-light" data-nav="documents">View published documents</button></div>';
  const changes=workflows.filter(w=>w.project_id===p.id&&w.kind==='variation'&&w.applied_at);
  const revised=changes.reduce((v,w)=>v+Number(w.amount||0),Number(p.baseline_budget||0));
  return header('Project workspace',p.name,p.code+' · '+p.stage,
  '<button class="btn btn-light" data-projectback="1">All projects</button>')+
  '<div class="stats"><div class="stat"><small>Original budget</small><strong>'+money(p.baseline_budget)+'</strong></div><div class="stat"><small>Applied change orders</small><strong>'+money(revised-p.baseline_budget)+'</strong></div><div class="stat"><small>Approved budget</small><strong>'+money(revised)+'</strong></div><div class="stat"><small>Progress</small><strong>'+h(p.progress)+'%</strong></div></div>'+
+ ( ['owner','admin','project_manager','site_engineer'].includes(activeRole)?
+ '<section class="form-panel"><h2>Record project progress</h2><p>This internal progress is not published automatically to clients.</p><form id="progress-form"><label class="field">Updated completion estimate (%)<input type="number" name="progress" min="0" max="100" step="1" required value="'+h(p.progress)+'"></label><label class="field">Reason and site evidence reference<input name="reason" minlength="8" maxlength="400" required placeholder="Example: inspected site pour log #SL-005"></label><button class="btn" type="submit">Record audited update</button></form></section>':'')+
  '<div class="grid"><div class="panel"><h3>Workflow controls</h3><p>Material requests and variations must pass through independent checkers in sequence.</p><button class="btn btn-light" data-nav="workflows">Open approvals</button></div><div class="panel"><h3>Project documents</h3><p>Upload to a private, tenant-scoped bucket. Client access requires explicit publication.</p><button class="btn btn-light" data-nav="documents">Open documents</button></div></div>';
 }
 function workflowList(){
@@ -129,14 +134,18 @@ async function loadData(){
 }
 async function loadOrgData(){
  if(!activeOrg)return;
- const [p,w,d,a]=await Promise.all([
- db.from('tekton_projects').select('id,organization_id,code,name,stage,baseline_budget,progress,created_at').eq('organization_id',activeOrg.id).order('created_at',{ascending:false}),
+ const [p,controls,w,d,a]=await Promise.all([
+ db.from('tekton_projects').select('id,organization_id,code,name,stage,created_at').eq('organization_id',activeOrg.id).order('created_at',{ascending:false}),
+ db.from('tekton_project_controls').select('organization_id,project_id,baseline_budget,progress').eq('organization_id',activeOrg.id),
  db.from('tekton_workflows').select('id,organization_id,project_id,kind,title,description,amount,days_delta,status,created_by,applied_at,created_at').eq('organization_id',activeOrg.id).order('created_at',{ascending:false}),
  db.from('tekton_documents').select('id,project_id,storage_path,file_name,mime_type,visibility,created_at').eq('organization_id',activeOrg.id).order('created_at',{ascending:false}),
  db.from('tekton_audit_events').select('id,organization_id,project_id,actor_id,event_type,details,created_at').eq('organization_id',activeOrg.id).order('created_at',{ascending:false}).limit(100)
  ]);
- for(const response of [p,w,d])if(response.error)throw response.error;
- projects=p.data||[];workflows=w.data||[];docs=d.data||[];audit=a.error?[]:a.data||[];
+ for(const response of [p,controls,w,d])if(response.error)throw response.error;
+ const byProject=new Map((controls.data||[]).map(x=>[x.project_id,x]));
+ projects=(p.data||[]).map(x=>({...x,baseline_budget:byProject.get(x.id)?.baseline_budget??null,
+  progress:byProject.get(x.id)?.progress??null}));
+ workflows=w.data||[];docs=d.data||[];audit=a.error?[]:a.data||[];
  if(!projects.some(p=>p.id===selectedProjectId))selectedProjectId=null;
  if(!workflows.some(w=>w.id===selectedWorkflowId)){selectedWorkflowId=null;approvals=[]}
  if(selectedWorkflowId)await loadApprovalSteps();
@@ -207,7 +216,14 @@ document.addEventListener('submit',async e=>{
  if(f.id==='new-project-form'){
   const code=fval(fd,'code'),name=fval(fd,'name'),budget=Number(fd.get('budget')),stage=fval(fd,'stage');
   if(!Number.isFinite(budget)||budget<0||!['planning','active','on_hold'].includes(stage))return notice('Invalid project details',true);
-  await perform(()=>db.from('tekton_projects').insert({organization_id:activeOrg.id,code,name,stage,baseline_budget:budget,created_by:user.id}),'Project saved to dedicated tenant');return;
+  await perform(()=>db.rpc('tekton_create_project',{p_org:activeOrg.id,p_code:code,p_name:name,p_stage:stage,p_baseline_budget:budget}),'Project and internal budget created atomically');return;
+ }
+ if(f.id==='progress-form'){
+  const progress=Number(fd.get('progress')),reason=fval(fd,'reason');
+  if(!Number.isInteger(progress)||progress<0||progress>100||reason.length<8||!selectedProjectId)
+   return notice('Provide valid progress and a reason.',true);
+  await perform(()=>db.rpc('tekton_update_project_progress',
+   {p_project:selectedProjectId,p_progress:progress,p_reason:reason}),'Progress update recorded with evidence note');return;
  }
  if(f.id==='new-workflow-form'){
   const proj=fval(fd,'project'),kind=fval(fd,'kind'),title=fval(fd,'title'),amount=Number(fd.get('amount')),days=Number(fd.get('days'));
