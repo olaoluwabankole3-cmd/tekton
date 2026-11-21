@@ -28,3 +28,7 @@ The existing static landing page and demo have **not** been visually rebranded i
 ## TEKTON v3 application brand integration
 
 The public landing page and browser-local interactive demo share the approved [`brand/`](brand/) logo vectors, color tokens, and Inter font. The charcoal/ash design replaces the original green/gold identity. Functional workflows and demo data remain unchanged. This site is still a demonstration, not a secure production tenant system.
+
+## Sprint 1 — Guided demonstration and client-view isolation
+
+The demonstration now includes a first-visit onboarding guide, direct guided procurement handoffs, and a simulated client view restricted to one fictional assigned project. Site reports must be explicitly published by a simulated Project Manager or Executive Director to appear in the client portal. Role switching is NOT secure authentication; it is a preview of planned access policies. Never use real customer data in this browser-only demo.
