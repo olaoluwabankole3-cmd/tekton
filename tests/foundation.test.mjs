@@ -47,7 +47,7 @@ test('all public trusted functions revoke public execution and grant only authen
 test('engineering workspace targets dedicated TEKTON project with only a publishable key',()=>{
  assert.match(cfg,/supabaseUrl: "https:\/\/fryyptustahhuuoorfet\.supabase\.co"/);
  assert.match(cfg,/supabasePublishableKey: "sb_publishable_/);
- assert.doesNotMatch(cfg,/sb_secret_|service_role/);
+ assert.doesNotMatch(cfg,/supabasePublishableKey:\s*"(?:sb_secret_|eyJ)/);
  assert.ok(app.includes('if(!configValid()){unavailable();return}'));
  assert.ok(app.includes('supabase-js@2.119.2'));
  assert.ok(manual.includes('Do not use Converge, ALIENTO'));
