@@ -1,13 +1,13 @@
 /* TEKTON document control & role-scoped demo. All data is fictional and local to this browser. */
 function s5Pages(role=data.role){
  const matrix={
- executive:['overview','projects','my-work','setup','procurement','inventory','variations','finance','site','documents','reports','insights','settings'],
- pm:['overview','projects','my-work','procurement','inventory','variations','site','documents','reports'],
- site:['overview','projects','my-work','procurement','inventory','site','documents'],
- qs:['overview','projects','my-work','procurement','variations','documents','reports'],
- procurement:['overview','my-work','procurement','inventory','documents'],
- finance:['overview','my-work','procurement','finance','documents','reports'],
- storekeeper:['overview','my-work','procurement','inventory','documents'],
+ executive:['overview','projects','my-work','visits','setup','procurement','inventory','variations','finance','site','documents','reports','insights','settings'],
+ pm:['overview','projects','my-work','visits','procurement','inventory','variations','site','documents','reports'],
+ site:['overview','projects','my-work','visits','procurement','inventory','site','documents'],
+ qs:['overview','projects','my-work','visits','procurement','variations','documents','reports'],
+ procurement:['overview','my-work','visits','procurement','inventory','documents'],
+ finance:['overview','my-work','visits','procurement','finance','documents','reports'],
+ storekeeper:['overview','my-work','visits','procurement','inventory','documents'],
  client:['client','documents']
  };return matrix[role]||['overview'];
 }
@@ -196,6 +196,7 @@ function s5RoleHome(){
  const cards=[
  ['Projects','projects','building','Review assigned projects'],
  ['My work','my-work','tasks','See tasks requiring your action'],
+ ['Field Visits & Activity','visits','location','Log departures, destinations and return outcomes'],
  ['Procurement','procurement','package',role==='storekeeper'?'Receive deliveries':'Review purchase workflows'],
  ['Inventory & Stores','inventory','layers',role==='site'?'Check availability':'Inspect permitted stock'],
  ['Variations','variations','layers','Evaluate technical and cost changes'],
