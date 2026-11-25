@@ -83,12 +83,14 @@ function yhwhAfterRender(){
  if(companyPicker&&companyPicker.parentElement)companyPicker.parentElement.hidden=yhwhActive;
  const back=document.querySelector('.site-back');
  if(back){back.textContent=yhwhActive?'← TEKTON website':'← Return to website';}
- if(!yhwhActive){document.title='TEKTON — Interactive Demo';return;}
+ if(!yhwhActive){document.title='TEKTON — Interactive Demo';const favicon=document.querySelector('link[rel="icon"]');if(favicon)favicon.href='../brand/icons/svg/tekton-favicon.svg';return;}
  document.title='YHWH & Partners — Enterprise Operations Presentation';
- document.documentElement.style.setProperty('--accent','#AD8D55');
+ document.documentElement.style.setProperty('--accent','#FF0009');
+ const favicon=document.querySelector('link[rel="icon"]');
+ if(favicon)favicon.href='assets/yhwh-mark-official.png';
  const brand=document.querySelector('.sidebar .brand');
  if(brand&&!brand.querySelector('.yhwh-brand')){
-  brand.insertAdjacentHTML('beforeend','<div class="yhwh-brand" aria-label="YHWH & Partners West Africa Limited — temporary wordmark"><div class="yhwh-brand-icon">Y</div><div class="yhwh-brand-name"><strong>YHWH <span>& PARTNERS</span></strong><small>WEST AFRICA LIMITED</small></div></div>');
+  brand.insertAdjacentHTML('beforeend','<div class="yhwh-brand" aria-label="Official YHWH & Partners West Africa Limited company logo"><img class="yhwh-brand-img" src="assets/yhwh-logo-official.png" alt="YHWH & Partners West Africa Limited" width="320" height="86"><small class="yhwh-brand-caption">ENTERPRISE OPERATIONS PREVIEW</small></div>');
  }
  if(content)content.insertAdjacentHTML('afterbegin',yhwhBanner());
  const pill=document.querySelector('.demo-pill');
@@ -116,7 +118,7 @@ function yhwhTransition(toYhwh){
  const panel=document.createElement('div');
  panel.className='yhwh-transition';
  panel.setAttribute('aria-live','polite');
- panel.innerHTML='<div class="yhwh-transition-art"></div><div class="yhwh-transition-stage"><div class="yhwh-transition-monogram">'+(toYhwh?'Y':'T')+'</div><div class="yhwh-transition-overline">'+(toYhwh?'A DEDICATED WORKSPACE':'RETURNING TO THE PLATFORM')+'</div><div class="yhwh-transition-title">'+(toYhwh?'YHWH & Partners':'TEKTON')+'</div><div class="yhwh-transition-subtitle">'+(toYhwh?'Construction operations, connected.':'Unified construction operations.')+'</div><div class="yhwh-transition-progress"><span></span></div></div>';
+ panel.innerHTML='<div class="yhwh-transition-art"></div><div class="yhwh-transition-stage"><div class="yhwh-transition-logo">'+(toYhwh?'<img src="assets/yhwh-logo-official.png" alt="YHWH & Partners West Africa Limited official logo" width="320" height="86">':'<div class="yhwh-return-brand">TEKTON</div>')+'</div><div class="yhwh-transition-overline">'+(toYhwh?'A DEDICATED WORKSPACE':'RETURNING TO THE PLATFORM')+'</div><div class="yhwh-transition-title">'+(toYhwh?'YHWH & Partners':'TEKTON')+'</div><div class="yhwh-transition-subtitle">'+(toYhwh?'Construction operations, connected.':'Unified construction operations.')+'</div><div class="yhwh-transition-progress"><span></span></div></div>';
  body.appendChild(panel);
  requestAnimationFrame(()=>panel.classList.add('is-visible'));
  return panel;
