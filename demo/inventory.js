@@ -123,7 +123,7 @@ function s4Modal(){
 
 function s4Action(el){
  const action=el.dataset.s4Action;
- if(action==='close-backdrop'&&el!==event.target)return;
+ /* Backdrop targeting is checked by the document click handler. */
  if(action==='close'||action==='close-backdrop'){view.modal='';render();return;}
  if(action==='tab'){view.s4Tab=el.dataset.s4Value||'overview';render();return;}
  if(action==='approve-count'){view.s4CountId=el.dataset.s4Id;view.modal='s4-approve-count';render();return;}
