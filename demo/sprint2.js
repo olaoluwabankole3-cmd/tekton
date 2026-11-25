@@ -6,7 +6,7 @@ function s2SeedVariations(){
  ],summit:[{id:'VAR-4101',projectId:'s1',title:'Podium drainage diversion',reason:'Unexpected site conflict requires alternative pipework.',reference:'SI-014',stage:0,costDelta:0,daysDelta:0,technical:'',history:[h('Site Engineer','Change raised','Site drainage issue')]}]};
 }
 
-function s2Variations(){return data.variations[data.activeCompany]||[]}
+function s2Variations(){return (data.variations[data.activeCompany]||[]).filter(v=>s5ProjectAllowed(v.projectId))}
 
 function s2VStatus(v){return v.stage==='declined'?'Declined':["Technical review","QS impact assessment","Management authorization","Client consent","Apply approved change","Applied to project"][v.stage]||'Unknown'}
 
@@ -106,9 +106,9 @@ function s2Submit(id,form){
 
 function s2Events(){
  document.addEventListener('click',e=>{
-  let tab=e.target.closest('[data-s2-tab]');if(tab){e.stopImmediatePropagation();if(roleIsClient())return;view.projectTab=tab.dataset.s2Tab;render();return}
+  let tab=e.target.closest('[data-s2-tab]');if(tab){e.stopImmediatePropagation();if(!s5CanPage('projects'))return;view.projectTab=tab.dataset.s2Tab;render();return}
   let act=e.target.closest('[data-s2-action]');if(act){e.stopImmediatePropagation();if(act.matches('.modal-layer')&&e.target!==act)return;s2Act(act.dataset.s2Action,act.dataset.s2Id);return}
-  let varButton=e.target.closest('[data-s2-open]');if(varButton){e.stopImmediatePropagation();if(roleIsClient())return;view.selectedVariation=varButton.dataset.s2Open;view.selectedProject='';view.selectedReq='';data.page='variations';render();return}
+  let varButton=e.target.closest('[data-s2-open]');if(varButton){e.stopImmediatePropagation();if(!s5CanPage('variations')||!s2Variations().some(v=>v.id===varButton.dataset.s2Open))return;view.selectedVariation=varButton.dataset.s2Open;view.selectedProject='';view.selectedReq='';data.page='variations';render();return}
   let advance=e.target.closest('[data-action="advance-request"]');if(advance){const r=reqs().find(x=>x.id===view.selectedReq);if(r&&stepForRole(r)&&(r.stage===5||r.stage===6)){e.stopImmediatePropagation();view.modal=r.stage===5?'receive-delivery':'match-invoice';render()}}
  });
  document.addEventListener('submit',e=>{let id=e.target.id;if(!['s2-change-form','s2-technical-form','s2-impact-form','supplier-form','s2-receipt-form','s2-invoice-form'].includes(id))return;e.preventDefault();e.stopImmediatePropagation();s2Submit(id,e.target)});
