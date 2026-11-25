@@ -44,8 +44,8 @@ function s7SaveProject(form){
  const types=['Building construction','Civil infrastructure','Power & utilities','Roads & drainage','Commercial','Residential','Other'];
  if(name.length<4||name.length>100||location.length<3||location.length>110||manager.length<3||manager.length>80||!types.includes(type))return notify('Enter a valid name, manager, type and site location.');
  if(!read('value')||!read('budget')||!Number.isFinite(value)||!Number.isFinite(budget)||value<0||budget<0||value>1e14||budget>1e14)return notify('Enter valid, nonnegative contract and budget figures.');
- if(startDate&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(startDate))return notify('Invalid start date.');
- if(endDate&&!/^\\d{4}-\\d{2}-\\d{2}$/.test(endDate))return notify('Invalid completion date.');
+ if(startDate&&!/^\d{4}-\d{2}-\d{2}$/.test(startDate))return notify('Invalid start date.');
+ if(endDate&&!/^\d{4}-\d{2}-\d{2}$/.test(endDate))return notify('Invalid completion date.');
  if(startDate&&endDate&&endDate<startDate)return notify('Completion must not be earlier than project start.');
  if(s7AllProjects().some(p=>p.name.toLowerCase()===name.toLowerCase()))return notify('A project with this name already exists in this workspace.');
  const roles=['pm','site','qs','procurement','finance','storekeeper'].filter(role=>role==='pm'||f.get('access_'+role)==='yes');
