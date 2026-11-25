@@ -73,7 +73,7 @@ function s5Catalog(base){
   return {...d,classification:clientAllowed?'Client release':d.id.startsWith('order-')||d.id.startsWith('change-')?'Controlled':'Internal',
   roles,clientAllowed,status:clientAllowed?'Published':d.status,owner:'System-generated sample',history:[],createdByRole:'site'};
  });
- const merged=[...s5DocsDB(),...automatic].map(d=>({...d,...(s5Overrides()[d.id]||{})}));
+ const stored=s5DocsDB();const merged=[...stored,...automatic].map(d=>stored.find(x=>x.id===d.id)||({...d,...(s5Overrides()[d.id]||{})}));
  return merged.filter(d=>s5CanSeeDoc(d));
 }
 
@@ -232,6 +232,23 @@ function s5StockAvailability(){
  const db=s4DB(),stores=db.stores.filter(s=>s.id==='main'||s5ProjectAllowed(s.id)),list=db.items;
  return heading('Site inventory availability','Materials available to your assigned site.','View quantities only. Stock values and adjustments are controlled by other departments.')+
  `<section class="card"><h2>Availability by store</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>Material</th>${stores.map(s=>`<th>${esc(s.name)}</th>`).join('')}<th>Unit</th></tr></thead><tbody>${list.map(it=>`<tr><td><b>${esc(it.name)}</b></td>${stores.map(s=>`<td>${s4Qty(it.sku,s.id)}</td>`).join('')}<td>${esc(it.unit)}</td></tr>`).join('')}</tbody></table></div></section><p class="disclaimer mt-2">Quantity-only fictional view. No stock valuations, other sites or procurement prices are displayed.</p>`;
+}
+
+function s5StoreScope(role=data.role){
+ const db=s4DB();if(['executive','procurement','finance'].includes(role))return db.stores.map(s=>s.id);
+ return db.stores.filter(s=>s.id==='main'||s5ProjectAllowed(s.id,role)).map(s=>s.id);
+}
+
+function s5StoreInventoryPage(){
+ const db=s4DB(),ids=s5StoreScope(),stores=db.stores.filter(s=>ids.includes(s.id)),items=db.items,counts=db.counts.filter(c=>ids.includes(c.storeId)),movements=db.movements.filter(m=>ids.includes(m.storeId)).slice(-18).reverse(),storekeeper=data.role==='storekeeper',manager=data.role==='pm';
+ const actions=storekeeper?`<button class="button" data-s4-action="issue">${icon('package',15)} Issue stock</button><button class="button secondary" data-s4-action="transfer">${icon('truck',15)} Transfer</button><button class="button secondary" data-s4-action="count">Record count</button><button class="button secondary" data-s4-action="new-item">New material</button>`:'';
+ return heading('Inventory & Stores',storekeeper?'Your store & material movements.':'Store stock & count approvals.','Quantities and references for authorized locations only. Financial valuations are restricted.',`<div class="s4-actions">${actions}</div>`)+
+ `<div class="s5-notice">${icon('shield',18)}<div><strong>${esc(roleLabel(data.role))} · ${stores.length} authorized stores</strong><small>Other project stores and inventory valuation are excluded from this view.</small></div></div>`+
+ `<div class="grid-3">${stat('Authorized locations',stores.length,'Site and central store','building')}${stat('Materials tracked',items.length,'Sample catalogue SKUs','package')}${stat('Counts pending',counts.filter(x=>x.status==='Pending').length,'Awaiting independent sign-off','clipboard')}</div>`+
+ `<section class="card gap-section"><h2>Stock quantities by location</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>Material / unit</th>${stores.map(s=>`<th>${esc(s.name)}</th>`).join('')}</tr></thead><tbody>${items.map(it=>`<tr><td><b>${esc(it.name)}</b><small style="display:block;color:#999">${esc(it.sku)} · ${esc(it.unit)}</small></td>${stores.map(s=>`<td>${s4Qty(it.sku,s.id).toLocaleString()}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section>`+
+ `<section class="card gap-section"><div class="s4-head"><h2>Stock count review</h2><span class="tag">${counts.filter(x=>x.status==='Pending').length} pending</span></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Count</th><th>Material</th><th>Store</th><th>System / physical</th><th>Status</th><th></th></tr></thead><tbody>${counts.slice().reverse().map(x=>`<tr><td>${esc(x.id)}</td><td>${esc(items.find(y=>y.sku===x.sku)?.name||x.sku)}</td><td>${esc(s4StoreName(x.storeId))}</td><td>${x.expected} / ${x.counted}</td><td>${esc(x.status)}</td><td>${manager&&x.status==='Pending'?`<button class="button small secondary" data-s4-action="approve-count" data-s4-id="${esc(x.id)}">Review</button>`:''}</td></tr>`).join('')||'<tr><td colspan="6">No physical counts in these locations yet.</td></tr>'}</tbody></table></div></section>`+
+ `<section class="card gap-section"><h2>Recent movement references</h2><div class="table-wrap"><table class="data-table"><thead><tr><th>Reference</th><th>Type</th><th>Material</th><th>Store</th><th>Change</th></tr></thead><tbody>${movements.map(x=>`<tr><td>${esc(x.reference)}</td><td>${esc(x.type)}</td><td>${esc(items.find(y=>y.sku===x.sku)?.name||x.sku)}</td><td>${esc(s4StoreName(x.storeId))}</td><td>${x.delta>0?'+':''}${x.delta}</td></tr>`).join('')}</tbody></table></div></section>`+
+ `<p class="disclaimer mt-2">Illustrative browser-local store permissions and stock records only, not secure real-world stock-control access.</p>`;
 }
 
 s5Events();
