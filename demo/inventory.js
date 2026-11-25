@@ -36,7 +36,7 @@ function s4LowItems(){return s4DB().items.filter(x=>s4Qty(x.sku)<x.min);}
 
 function s4Can(verb){return ({"issue":["storekeeper"],transfer:["storekeeper"],count:["storekeeper"],approve:["executive","pm"],requisition:["site"]})[verb]?.includes(data.role)||false;}
 
-function s4Options(selected){return s4DB().stores.map(s=>`<option value="${esc(s.id)}" ${s.id===selected?'selected':''}>${esc(s.name)}</option>`).join('');}
+function s4Options(selected){return s4DB().stores.filter(s=>s5StoreScope().includes(s.id)).map(s=>`<option value="${esc(s.id)}" ${s.id===selected?'selected':''}>${esc(s.name)}</option>`).join('');}
 
 function s4ProjectOptions(selected){return getProjects().map(p=>`<option value="${esc(p.id)}" ${p.id===selected?'selected':''}>${esc(p.name)}</option>`).join('');}
 
@@ -127,11 +127,11 @@ function s4Action(el){
  /* Backdrop targeting is checked by the document click handler. */
  if(action==='close'||action==='close-backdrop'){view.modal='';render();return;}
  if(action==='tab'){view.s4Tab=el.dataset.s4Value||'overview';render();return;}
- if(action==='approve-count'){view.s4CountId=el.dataset.s4Id;view.modal='s4-approve-count';render();return;}
+ if(action==='approve-count'){const record=s4DB().counts.find(x=>x.id===el.dataset.s4Id);if(!s4Can('approve')||!record||!s5StoreScope().includes(record.storeId))return notify('Count review is outside your role or store scope.');view.s4CountId=el.dataset.s4Id;view.modal='s4-approve-count';render();return;}
  if(action==='approve-count-now'||action==='reject-count'){
   if(!s4Can('approve'))return notify('Only Project Management or Executive roles can review a physical count.');
   const c=s4DB().counts.find(x=>x.id===view.s4CountId);
-  if(!c||c.status!=='Pending')return notify('This count is no longer pending.');
+  if(!c||c.status!=='Pending'||!s5StoreScope().includes(c.storeId))return notify('This count is not available for your role or location.');
   if(action==='approve-count-now'){
    const actual=s4Qty(c.sku,c.storeId),difference=c.counted-actual;
    if(difference)s4Log(c.sku,c.storeId,difference,'Approved count adjustment',c.id,c.storeId,'Count reviewed by management');
@@ -168,10 +168,10 @@ function s4Submit(form){
  if(id==='s4-issue-form'||id==='s4-transfer-form'){
   if(!s4Can(id==='s4-issue-form'?'issue':'transfer'))return notify('Switch to Site Storekeeper role.');
   const ref=String(f.get('ref')||'').trim().slice(0,60);
-  if(!s4DB().stores.some(s=>s.id===storeId)||!Number.isInteger(qty)||qty<=0||qty>100000||ref.length<3)return notify('Check store, reference and quantity.');
+  if(!s5StoreScope().includes(storeId)||!Number.isInteger(qty)||qty<=0||qty>100000||ref.length<3)return notify('Check store, reference and quantity.');
   if(s4Qty(sku,storeId)<qty)return notify('Insufficient stock at source store; no quantities changed.');
   if(id==='s4-transfer-form'){
-    const toId=String(f.get('toId')||'');if(toId===storeId||!s4DB().stores.some(s=>s.id===toId))return notify('Select a different valid destination store.');
+    const toId=String(f.get('toId')||'');if(toId===storeId||!s5StoreScope().includes(toId))return notify('Select a different valid destination store.');
     s4Log(sku,storeId,-qty,'Transfer out',ref,'','Transferred to '+s4StoreName(toId));
     s4Log(sku,toId,qty,'Transfer in',ref,'','Transferred from '+s4StoreName(storeId));
   }else{
@@ -181,7 +181,7 @@ function s4Submit(form){
   view.modal='';save();render();notify('Stock movement recorded in the demo ledger.');return;
  }
  if(id==='s4-count-form'){
-  if(!s4Can('count')||!s4DB().stores.some(s=>s.id===storeId))return notify('Switch to Site Storekeeper and choose a store.');
+  if(!s4Can('count')||!s5StoreScope().includes(storeId))return notify('Switch to Site Storekeeper and choose a store.');
   const counted=Number(f.get('counted')),note=String(f.get('note')||'').trim();
   if(!Number.isInteger(counted)||counted<0||counted>1e6||note.length<4)return notify('Enter a valid count and note.');
   s4DB().counts.push({id:s4Id('COUNT'),sku,storeId,expected:s4Qty(sku,storeId),counted,note:note.slice(0,180),date:s4Stamp(),status:'Pending'});
