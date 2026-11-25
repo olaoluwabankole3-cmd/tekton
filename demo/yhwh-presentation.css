@@ -1,0 +1,80 @@
+
+/* YHWH presentation switch. TEKTON's default UI remains untouched until activation. */
+.yhwh-switch{border:1px solid #d5d0c3;background:#f6f5f1;color:#4d4639;padding:9px 13px;border-radius:9px;font-size:11px;font-weight:800;letter-spacing:-.01em;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;white-space:nowrap;transition:background .2s ease,border-color .2s ease,transform .2s ease,box-shadow .2s ease}
+.yhwh-switch:hover{background:#eae5d8;border-color:#b29a67;transform:translateY(-1px);box-shadow:0 5px 12px rgba(45,44,34,.09)}
+.yhwh-switch svg{width:14px;height:14px}
+.yhwh-brand{display:none}
+.yhwh-mode{--yhwh-gold:#b89a5c;--yhwh-gold-soft:#e9dcc0;--yhwh-green:#243a31;--yhwh-dark:#172c28}
+.yhwh-mode body{background:#f8f8f4}
+.yhwh-mode .sidebar{background:#182a26;color:#f6f4e9;box-shadow:5px 0 22px rgba(17,35,27,.15)}
+.yhwh-mode .sidebar .brand-logo{display:none}
+.yhwh-mode .sidebar .brand{padding:24px 19px 22px;min-height:111px}
+.yhwh-mode .sidebar-divider{background:rgba(242,236,215,.15)}
+.yhwh-mode .sidebar .side-caption{color:#c5b68e}
+.yhwh-mode .nav button{color:#cad3cf}
+.yhwh-mode .nav button:hover{background:#2b4539;color:#fff}
+.yhwh-mode .nav button.active{background:#314b3f;color:#fff}
+.yhwh-mode .nav button.active::before{background:#cdb57d}
+.yhwh-mode .side-help{background:#223b33;border-color:#335247}
+.yhwh-mode .side-help p{color:#b9ccc3}
+.yhwh-mode .side-help button{background:#cbb583;color:#21362d}
+.yhwh-mode .s3-pilot-sidebar{color:#d6c391}
+.yhwh-brand{align-items:center;gap:11px;max-width:220px;min-width:0}
+.yhwh-mode .yhwh-brand{display:flex}
+.yhwh-brand-icon{width:47px;height:47px;flex:none;border:1px solid rgba(217,192,132,.65);background:linear-gradient(145deg,#d4bf8d,#987744);color:#172922;border-radius:12px;display:grid;place-items:center;font:800 28px/1 Georgia,serif;box-shadow:0 7px 18px #0c1b1740}
+.yhwh-brand-name{display:flex;flex-direction:column;min-width:0;gap:5px}
+.yhwh-brand-name strong{font:800 12px/1.15 Inter,sans-serif;letter-spacing:.015em;white-space:nowrap;color:#f7f3e8}
+.yhwh-brand-name strong span{color:#e3c990}
+.yhwh-brand-name small{font:600 8px/1.3 Inter,sans-serif;letter-spacing:.15em;color:#b9c9c0}
+.yhwh-mode .topbar{background:rgba(255,255,251,.98);border-bottom-color:#e2e4de}
+.yhwh-mode .top-title{color:#213a2f}
+.yhwh-mode .demo-pill{background:#eff5ef;color:#476254;border-color:#d0e0d4}
+.yhwh-pill-dot{width:6px;height:6px;border-radius:50%;background:#5c8b73;display:inline-block;margin-right:4px}
+.yhwh-mode .yhwh-switch{border-color:#bba36e;background:#213c31;color:#fff}
+.yhwh-mode .yhwh-switch:hover{background:#305744}
+.yhwh-mode .button:not(.secondary):not(.ghost):not(.soft){background:#254438;color:#fff}
+.yhwh-mode .button:not(.secondary):not(.ghost):not(.soft):hover{background:#31624e}
+.yhwh-mode .hero{background:#223b32}
+.yhwh-mode .hero-image{background-image:linear-gradient(90deg,rgba(20,43,35,.98),rgba(23,47,37,.91) 40%,rgba(29,58,44,.35)),url('assets/construction-site.webp')}
+.yhwh-mode .hero .button{background:#d6be89!important;color:#21392f!important}
+.yhwh-mode .hero .eyebrow{color:#e7c989}
+.yhwh-mode .hero-badge{color:#efe4ca;border-color:#ac9462;background:rgba(18,38,31,.79)}
+.yhwh-mode .stat-icon{background:#eaf0eb;color:#355b48}
+.yhwh-mode .stat strong{color:#213c31}
+.yhwh-mode .bar span,.yhwh-mode .chartbar.dark,.yhwh-mode .step.done{background:#3b634c}
+.yhwh-mode .tag.green{background:#e4eee5;color:#3e6347}
+.yhwh-mode .tag.warning{background:#faf2df;color:#866e3b}
+.yhwh-mode .tag.blue{background:#edf2f0;color:#386253}
+.yhwh-mode .s4-tabs button.active{background:#244336}
+.yhwh-mode .s4-banner{background:#264237}
+.yhwh-mode .callout{border-left-color:#9c8655}
+.yhwh-mode .content{animation:yhwh-enter .47s cubic-bezier(.2,.7,.2,1) both}
+.yhwh-context{position:relative;display:flex;justify-content:space-between;align-items:center;gap:22px;margin:0 0 23px;background:linear-gradient(112deg,#fff,#f8f6ef);border:1px solid #e7e3d7;border-radius:13px;padding:18px 22px 18px 25px;box-shadow:0 6px 26px rgba(20,39,29,.035);overflow:hidden}
+.yhwh-context-rail{position:absolute;left:0;top:0;bottom:0;width:4px;background:#b69b60}
+.yhwh-context-kicker{display:block;color:#987a3d;font-size:9px;font-weight:800;letter-spacing:.13em;margin-bottom:7px}
+.yhwh-context-message strong{display:block;font-size:15px;letter-spacing:-.02em;color:#263b30;line-height:1.35}
+.yhwh-context-message strong span{font-weight:500;color:#536257}
+.yhwh-context-message p{font-size:11px;color:#79817b;margin:6px 0 0;max-width:750px;line-height:1.55}
+.yhwh-context-sectors{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap;min-width:150px}
+.yhwh-context-sectors span{padding:7px 10px;border:1px solid #e4dfcf;background:#fff;border-radius:99px;font-size:9px;font-weight:800;letter-spacing:.045em;color:#5e715e}
+.yhwh-transition{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;pointer-events:all;overflow:hidden;background:#172f27;color:#f7f5ef;opacity:0;visibility:hidden;transform:translateY(2%);transition:opacity .5s ease,transform .7s cubic-bezier(.18,.7,.2,1),visibility .5s}
+.yhwh-transition.is-visible{opacity:1;visibility:visible;transform:translateY(0)}
+.yhwh-transition.is-exiting{opacity:0;visibility:hidden;transform:translateY(-2%)}
+.yhwh-transition-art{position:absolute;inset:-30%;background:radial-gradient(circle at 26% 62%,rgba(190,156,90,.14),transparent 35%),radial-gradient(circle at 70% 32%,rgba(210,201,168,.07),transparent 35%);transform:rotate(-8deg)}
+.yhwh-transition::before,.yhwh-transition::after{content:"";position:absolute;width:1px;height:150%;top:-20%;background:rgba(214,187,117,.15);transform:rotate(22deg)}
+.yhwh-transition::before{left:20%}
+.yhwh-transition::after{right:20%}
+.yhwh-transition-stage{text-align:center;position:relative;z-index:1;padding:24px;display:flex;align-items:center;flex-direction:column;max-width:640px}
+.yhwh-transition-monogram{width:86px;height:86px;border-radius:22px;display:grid;place-items:center;border:1px solid #c5a96e;background:linear-gradient(145deg,#c7b184,#8f7446);color:#172f27;font:800 50px Georgia,serif;box-shadow:0 22px 55px rgba(3,17,12,.3);margin-bottom:35px;transform:scale(.86);transition:transform .8s cubic-bezier(.12,.7,.18,1)}
+.yhwh-transition.is-visible .yhwh-transition-monogram{transform:scale(1)}
+.yhwh-transition-overline{font-size:11px;letter-spacing:.24em;font-weight:800;color:#cdb57b;margin-bottom:12px}
+.yhwh-transition-title{font:500 clamp(32px,5vw,59px)/1.07 Georgia,serif;letter-spacing:-.035em}
+.yhwh-transition-subtitle{font-size:13px;color:#bacfc4;margin-top:12px}
+.yhwh-transition-progress{width:182px;height:2px;background:rgba(240,230,204,.2);margin-top:35px;overflow:hidden;border-radius:2px}
+.yhwh-transition-progress span{display:block;height:100%;width:100%;background:#d5b97c;transform:translateX(-100%)}
+.yhwh-transition.is-visible .yhwh-transition-progress span{animation:yhwh-progress 1.28s ease forwards}
+@keyframes yhwh-progress{to{transform:translateX(0)}}
+@keyframes yhwh-enter{from{opacity:.58;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1100px){.yhwh-context{flex-direction:column;align-items:flex-start}.yhwh-context-sectors{justify-content:flex-start}.yhwh-switch{padding:8px}.yhwh-switch .yhwh-switch-label{max-width:100px}}
+@media(max-width:760px){.yhwh-switch{padding:9px 10px;font-size:10px}.yhwh-switch .yhwh-switch-label{display:none}.yhwh-mode .topbar{min-width:0}.yhwh-mode .demo-pill{font-size:8px;padding:7px}.yhwh-context{padding:15px 17px 15px 20px;gap:12px}.yhwh-context-kicker{font-size:8px}.yhwh-context-message strong{font-size:13px}.yhwh-brand-icon{width:41px;height:41px}.yhwh-brand-name strong{font-size:11px}.yhwh-mode .sidebar .brand{padding:21px 16px}}
+@media(prefers-reduced-motion:reduce){.yhwh-transition,.yhwh-mode .content,.yhwh-switch{transition:none!important;animation:none!important}.yhwh-transition-monogram,.yhwh-transition-progress span{animation:none!important;transform:none!important}}
