@@ -78,3 +78,78 @@
 @media(max-width:1100px){.yhwh-context{flex-direction:column;align-items:flex-start}.yhwh-context-sectors{justify-content:flex-start}.yhwh-switch{padding:8px}.yhwh-switch .yhwh-switch-label{max-width:100px}}
 @media(max-width:760px){.yhwh-switch{padding:9px 10px;font-size:10px}.yhwh-switch .yhwh-switch-label{display:none}.yhwh-mode .topbar{min-width:0}.yhwh-mode .demo-pill{font-size:8px;padding:7px}.yhwh-context{padding:15px 17px 15px 20px;gap:12px}.yhwh-context-kicker{font-size:8px}.yhwh-context-message strong{font-size:13px}.yhwh-brand-icon{width:41px;height:41px}.yhwh-brand-name strong{font-size:11px}.yhwh-mode .sidebar .brand{padding:21px 16px}}
 @media(prefers-reduced-motion:reduce){.yhwh-transition,.yhwh-mode .content,.yhwh-switch{transition:none!important;animation:none!important}.yhwh-transition-monogram,.yhwh-transition-progress span{animation:none!important;transform:none!important}}
+
+/* Verified YHWH brand refresh · original logo sampled: red #FF0009, green #324E34, black, white.
+   Overrides apply ONLY when the dedicated YHWH presentation mode is active. */
+.yhwh-mode{--yhwh-red:#ff0009;--yhwh-red-dark:#d4000a;--yhwh-red-soft:#fff0f0;--yhwh-green:#324e34;--yhwh-ink:#1c1e1c;--yhwh-border:#e8e8e6}
+.yhwh-mode body{background:#fafafa;color:var(--yhwh-ink)}
+.yhwh-mode .sidebar{background:#fff;color:#272b29;border-right:1px solid #eaeaea;box-shadow:4px 0 20px rgba(0,0,0,.035)}
+.yhwh-mode .sidebar .brand{min-height:112px;padding:22px 19px 18px;align-items:center}
+.yhwh-mode .sidebar-divider{background:#ececec}
+.yhwh-mode .sidebar .side-caption{color:#727875}
+.yhwh-mode .nav button{color:#555b58}
+.yhwh-mode .nav button:hover{background:#fff2f2;color:#ba000a}
+.yhwh-mode .nav button.active{background:#fff0f1;color:#d60009}
+.yhwh-mode .nav button.active::before{background:#ff0009}
+.yhwh-mode .side-help{background:#324e34;border:1px solid #324e34;color:#fff;box-shadow:0 10px 25px rgba(50,78,52,.13)}
+.yhwh-mode .side-help b{color:#fff}
+.yhwh-mode .side-help p{color:#e2e8e2}
+.yhwh-mode .side-help button{background:#fff;color:#ba0008}
+.yhwh-mode .s3-pilot-sidebar{color:#53645b}
+.yhwh-brand{flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;width:100%}
+.yhwh-mode .yhwh-brand{display:flex}
+.yhwh-brand-img{display:block;max-width:100%;width:210px;height:auto;object-fit:contain;object-position:left center}
+.yhwh-brand-caption{font-size:8px;letter-spacing:.12em;font-weight:800;color:#747b77;padding-left:2px}
+.yhwh-mode .topbar{background:rgba(255,255,255,.97);border-bottom-color:#eaeae8}
+.yhwh-mode .top-title{color:#202822}
+.yhwh-mode .demo-pill{background:#fff1f2;border-color:#ffd7d8;color:#a31219}
+.yhwh-mode .yhwh-switch{background:#ff0009;border-color:#ff0009;color:#fff;box-shadow:0 3px 12px rgba(255,0,9,.16)}
+.yhwh-mode .yhwh-switch:hover{background:#d90008;border-color:#d90008}
+.yhwh-pill-dot{background:#ff0009}
+.yhwh-mode .headline .eyebrow,.yhwh-mode .kicker{color:#dc101a}
+.yhwh-mode .button:not(.secondary):not(.ghost):not(.soft){background:#e6000b;color:#fff}
+.yhwh-mode .button:not(.secondary):not(.ghost):not(.soft):hover{background:#c80009}
+.yhwh-mode .button.secondary{border-color:#dedede;color:#343a35;background:#fff}
+.yhwh-mode .button.secondary:hover{border-color:#fa9da3;color:#e0000a}
+.yhwh-mode .hero{background:#ab030c}
+.yhwh-mode .hero-image{background-image:linear-gradient(90deg,rgba(73,1,7,.98),rgba(157,7,17,.92) 46%,rgba(182,12,22,.30)),url('assets/construction-site.webp')}
+.yhwh-mode .hero .button{background:#fff!important;color:#b50008!important}
+.yhwh-mode .hero .eyebrow{color:#ffe1e1}
+.yhwh-mode .hero-badge{background:rgba(76,4,9,.74);border-color:rgba(255,255,255,.4);color:#fff}
+.yhwh-mode .stat-icon{background:#fff0f1;color:#e6000b}
+.yhwh-mode .stat strong{color:#2a2f2a}
+.yhwh-mode .bar span,.yhwh-mode .chartbar.dark,.yhwh-mode .step.done{background:#ff0009}
+.yhwh-mode .tag.blue{color:#be121b;background:#fff0f1}
+.yhwh-mode .tag.green{color:#2c5836;background:#eaf2ea}
+.yhwh-mode .tag.warning{color:#a85a1b;background:#fff3e8}
+.yhwh-mode .s4-tabs button.active{background:#e6000b;color:#fff}
+.yhwh-mode .s4-banner{background:#324e34;border-left:5px solid #ff0009}
+.yhwh-mode .callout{border-left-color:#ff0009}
+.yhwh-mode .s5-notice{border-left-color:#ff0009}
+.yhwh-context{background:#fff;border:1px solid #ededec;box-shadow:0 8px 24px rgba(25,25,25,.035)}
+.yhwh-context-rail{background:#ff0009}
+.yhwh-context-kicker{color:#dc0009}
+.yhwh-context-message strong{color:#1b1d1c}
+.yhwh-context-message strong span{color:#4f5650}
+.yhwh-context-message p{color:#777b78}
+.yhwh-context-sectors span{color:#324e34;border-color:#d9e3da;background:#f4f8f4}
+.yhwh-transition{background:#fff;color:#151515}
+.yhwh-transition-art{background:radial-gradient(circle at 20% 60%,rgba(255,0,9,.13),transparent 32%),radial-gradient(circle at 74% 25%,rgba(50,78,52,.10),transparent 35%)}
+.yhwh-transition::before,.yhwh-transition::after{background:rgba(255,0,9,.13)}
+.yhwh-transition-logo{width:min(84vw,400px);height:145px;display:flex;align-items:center;justify-content:center;flex:none;border:1px solid #f0eded;border-radius:20px;background:#fff;box-shadow:0 22px 65px rgba(35,35,35,.085);padding:24px;margin-bottom:30px;transform:translateY(8px) scale(.97);transition:transform .8s cubic-bezier(.13,.7,.2,1)}
+.yhwh-transition.is-visible .yhwh-transition-logo{transform:translateY(0) scale(1)}
+.yhwh-transition-logo img{width:100%;max-width:320px;height:auto;display:block;object-fit:contain}
+.yhwh-return-brand{font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:-.05em;color:#202223}
+.yhwh-transition-overline{color:#dd000a;letter-spacing:.2em}
+.yhwh-transition-title{font:700 clamp(29px,5vw,51px)/1.12 Inter,Arial,sans-serif;letter-spacing:-.055em;color:#262b27}
+.yhwh-transition-subtitle{color:#616b64}
+.yhwh-transition-progress{background:#f7e5e6}
+.yhwh-transition-progress span{background:#ff0009}
+@media(max-width:760px){
+ .yhwh-mode .sidebar .brand{padding:19px 15px 17px;min-height:105px}
+ .yhwh-brand-img{max-width:190px;width:100%}
+ .yhwh-brand-caption{font-size:7px}
+ .yhwh-transition-logo{height:125px;padding:16px;margin-bottom:24px}
+ .yhwh-transition-stage{padding:18px}
+ .yhwh-context{border-left:0}
+}
