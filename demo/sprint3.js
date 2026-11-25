@@ -29,7 +29,7 @@ function s3DocumentCatalog(){
  const variations=s2Variations().map(v=>({id:'change-'+v.id,type:'Change instruction',category:'Commercial',name:'Change instruction · '+v.id,date:today(),projectId:v.projectId,status:s2VStatus(v),revision:'Demo revision',description:v.reason,lines:['Instruction / RFI reference: '+v.reference,'Technical review: '+(v.technical||'Not assessed'), 'Proposed cost: '+(v.stage>=2?money(v.costDelta):'Under assessment'),'Stage: '+s2VStatus(v),...v.history.map(h=>h.title+' — '+h.who+': '+h.detail)]}));
  const orders=reqs().filter(r=>r.stage>=4).map(r=>({id:'order-'+r.id,type:'Purchase record',category:'Procurement',name:'Purchase evidence · '+r.id,date:r.date,projectId:r.projectId,status:statusText(r),revision:'Sample record',description:'Illustrative purchase order and supporting approval chain. No real purchase order was issued to a supplier.',lines:['Material: '+r.item,'Quantity: '+r.qty,'Supplier: '+(r.vendor||'Not selected'),'Approved purchase value: '+money(r.qty*r.unitCost), 'Supplier selection: '+(r.selectionReason||'Historical sample record'), ...(r.receipts||[]).map(x=>'Delivery note '+x.note+': '+x.acceptedQty+' accepted of '+x.quantity+' observed'),...r.history.map(h=>h.title+' — '+h.who)]}));
  const site=reports().map(r=>({id:'site-'+r.id,type:'Site progress report',category:'Site operations',name:'Site report · '+r.id,date:r.date,projectId:r.projectId,status:isPublishedToClient(r)?'Published for client':'Internal only',revision:'Daily log',description:r.summary,lines:['Reported progress: '+r.progress+'%','Submitted by: '+r.author, 'Visibility: '+(isPublishedToClient(r)?'Published':'Internal report'),'This is illustrative progress reporting, not verified construction evidence.']}));
- return [...sample,...orders,...variations,...site];
+ return s5Catalog([...sample,...orders,...variations,...site]);
 }
 
 function s3DocumentRegister(){
@@ -72,7 +72,7 @@ function s3Events(){
   const el=e.target.closest('[data-s3-step],[data-s3-toggle],[data-s3-next],[data-s3-limit],[data-s3-save],[data-s3-reset],[data-s3-doc],[data-s3-report],[data-s3-back],[data-s3-print],[data-s3-export]');
   if(!el)return;
   e.stopImmediatePropagation();
-  if(roleIsClient())return;
+  if(!s5CanPage('documents')&&!s5CanPage('reports')&&!s5CanPage('setup'))return;
   const ds=el.dataset,s=data.s3Setup;
   if(ds.s3Step!==undefined){const n=Number(ds.s3Step);if(n>=0&&n<=3&&(n<=s.step||s.previewSaved)){s.step=n;save();render()}return}
   if(ds.s3Toggle){const m=ds.s3Toggle;if(m!=='projects'&&s3Modules().some(x=>x.id===m)){s.modules=s.modules.includes(m)?s.modules.filter(x=>x!==m):[...s.modules,m];s.previewSaved=false;save();render()}return}
@@ -80,15 +80,15 @@ function s3Events(){
   if(ds.s3Limit){if([10000,50000,100000].includes(Number(ds.s3Limit))){s.approvalLimit=Number(ds.s3Limit);s.previewSaved=false;save();render()}return}
   if(ds.s3Save){s.previewSaved=true;save();render();notify('Configuration preview saved in this browser only');return}
   if(ds.s3Reset){data.s3Setup=s3DefaultSetup();save();render();return}
-  if(ds.s3Doc){const d=s3DocumentCatalog().find(x=>x.id===ds.s3Doc);if(!d)return;view.s3Doc=d.id;view.s3Report='';view.query='';data.page='documents';render();return}
-  if(ds.s3Report){if(!getProjects().some(p=>p.id===ds.s3Report))return;view.s3Report=ds.s3Report;view.s3Doc='';data.page='reports';render();return}
+  if(ds.s3Doc){if(!s5CanPage('documents'))return;const d=s3DocumentCatalog().find(x=>x.id===ds.s3Doc);if(!d)return;view.s3Doc=d.id;view.s3Report='';view.query='';data.page='documents';render();return}
+  if(ds.s3Report){if(!s5CanPage('reports')||!getProjects().some(p=>p.id===ds.s3Report))return;view.s3Report=ds.s3Report;view.s3Doc='';data.page='reports';render();return}
   if(ds.s3Back){view.s3Doc='';view.s3Report='';render();return}
-  if(ds.s3Print){window.print();return}
-  if(ds.s3Export){s3SaveTextFile();return}
+  if(ds.s3Print){if(data.page==='documents'&&!s5DocumentById(view.s3Doc))return;window.print();return}
+  if(ds.s3Export){if(data.page==='documents'&&!s5DocumentById(view.s3Doc))return;s3SaveTextFile();return}
  });
  document.addEventListener('submit',e=>{
   if(e.target.id!=='s3-profile-form')return;
-  e.preventDefault();e.stopImmediatePropagation();if(roleIsClient())return;
+  e.preventDefault();e.stopImmediatePropagation();if(!s5CanPage('setup'))return;
   const f=new FormData(e.target),name=String(f.get('name')||'').trim(),type=String(f.get('type')),region=String(f.get('region')),size=String(f.get('size'));
   if(name.length<3||name.length>90||!["General contractor","Developer","Engineering consultant","Infrastructure contractor","Specialist subcontractor"].includes(type)||!["Nigeria","East Africa","West Africa","Europe","North America","Other"].includes(region)||!["1–24 employees","25–100 employees","101–500 employees","500+ employees"].includes(size))return notify('Check the fictional company profile details.');
   Object.assign(data.s3Setup,{name,type,region,size,step:1,previewSaved:false});save();render();
