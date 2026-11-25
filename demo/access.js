@@ -15,10 +15,10 @@ function s5Pages(role=data.role){
 function s5CanPage(page,role=data.role){return s5Pages(role).includes(page);}
 
 function s5RoleProjects(role=data.role){
- const all=currentCompany().projects.map(p=>p.id);
- if(['executive','procurement','finance'].includes(role))return all;
- if(['pm','qs'].includes(role))return all.slice(0,2);
- return all.slice(0,1);
+ const seeded=currentCompany().projects.map(p=>p.id);
+ const added=s7AddedProjects().filter(p=>role==='executive'||(p.accessRoles||[]).includes(role)).map(p=>p.id);
+ const visible=['executive','procurement','finance'].includes(role)?seeded:['pm','qs'].includes(role)?seeded.slice(0,2):seeded.slice(0,1);
+ return visible.concat(added);
 }
 
 function s5ProjectAllowed(id,role=data.role){return s5RoleProjects(role).includes(id);}
