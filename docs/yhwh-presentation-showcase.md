@@ -19,7 +19,12 @@
 ## Branding points for official company assets
 - `demo/yhwh-presentation.js`: `yhwhAfterRender()` adds the temporary wordmark to the sidebar; `yhwhTransition()` contains the temporary transition monogram.
 - `demo/yhwh-presentation.css`: scoped `.yhwh-mode` color tokens, sidebar/theme rules, transition treatment and responsive styling.
-- **Awaiting:** official logo file, verified brand color values and any final brand guidelines. Current green/gold scheme is an interpretive presentation palette, **not a confirmed official brand identity**.
+- Official site artwork used **without redrawing**:
+  - Header wordmark: `https://www.yhwhandpartners.com/wp-content/themes/yhwh/img/logo@2x.png` → `demo/assets/yhwh-logo-official.png`.
+  - Website icon: `https://www.yhwhandpartners.com/wp-content/uploads/2025/11/cropped-YHWH-Logo-270x270.png` → `demo/assets/yhwh-mark-official.png`.
+- Extracted dominant colors directly from the official wordmark: **red `#FF0009`**, forest green **`#324E34`**, black **`#000000`**, and white **`#FFFFFF`**.
+- User-requested presentation treatment: **red and white lead** the interface; the official forest green provides a secondary contrast color. These are sampled brand-mark colors, not a formal brand-style-guide specification.
+- Source assets may be used here only as part of this prospective client's private presentation; do not imply endorsement or upload confidential company information.
 
 ## Data and security boundaries
 - All project names, project values, document records, attendance-like site visits, suppliers, prices, stock quantities, procurement actions, and employee labels are **fictional samples**.
