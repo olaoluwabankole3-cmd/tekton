@@ -251,4 +251,10 @@ function s5StoreInventoryPage(){
  `<p class="disclaimer mt-2">Illustrative browser-local store permissions and stock records only, not secure real-world stock-control access.</p>`;
 }
 
+function s5SiteProjectsPage(){
+ const projects=getProjects();
+ return heading('Assigned site projects','Your active construction work.','Project progress, site reports and issued documents—without confidential contract valuations.')+
+ `<div class="s5-role-grid gap-section">${projects.map(p=>`<article class="card"><span class="tag">${esc(p.type)}</span><h2 style="margin:15px 0 8px">${esc(p.name)}</h2><p class="muted">${esc(p.location)}</p><div class="feature-split"><span class="muted">Reported progress</span><strong>${p.progress}%</strong></div><div class="bar mt-1"><span style="width:${p.progress}%"></span></div><p class="muted mt-2">${reports().filter(r=>r.projectId===p.id).length} site updates · ${s3DocumentCatalog().filter(d=>d.projectId===p.id).length} permitted document records</p><button class="button secondary small" data-project="${esc(p.id)}">Open assigned site ${icon('arrow',12)}</button></article>`).join('')}</div><p class="disclaimer mt-2">This role view intentionally excludes company budgets, contract values and unrelated project sites.</p>`;
+}
+
 s5Events();
